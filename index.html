@@ -141,21 +141,21 @@ const CONFIG = {
     building: {
       title: "세계최고의 빌딩 키우기",
       genre: "모바일 · 키우기",
-      tagline: "한 층씩 올려 세계 최고의 빌딩으로",
-      engine: "", platform: "", status: "개발 중",
-      description: "게임 소개 문단을 적어 주세요.",
-      features: ["특징 1", "특징 2", "특징 3"],
+      tagline: "한 층씩 올려 세계에서 가장 높은 빌딩으로",
+      engine: "", platform: "모바일", status: "개발 중",
+      description: "빈 땅에서 시작해 한 층씩 빌딩을 올리는 키우기 게임. 층을 늘리고 가게와 입주자를 채워 수익을 내고, 그 돈으로 다시 더 높이 올린다. 목표는 단 하나, 세계 최고의 빌딩.",
+      features: ["한 층씩 쌓아 올리는 성장의 재미", "층마다 다른 가게와 입주자", "세계 최고 높이에 도전"],
       image: "", youtube: "",
       links: [{ label: "출시 알림", url: "" }],
       color: "#3c7dd9"
     },
     sea: {
       title: "잘자, 바다야",
-      genre: "모바일",
-      tagline: "한 줄 소개를 적어 주세요",
+      genre: "모바일 · 힐링 항해 어드벤처",
+      tagline: "뗏목 하나로 부산에서 세계의 바다까지",
       engine: "GameMaker", platform: "iOS · Android", status: "개발 중",
-      description: "게임 소개 문단을 적어 주세요.",
-      features: ["특징 1", "특징 2", "특징 3"],
+      description: "작은 뗏목을 타고 부산에서 출발해 세계 곳곳의 항구로 떠나는 픽셀 아트 항해 게임. 시간에 쫓기지 않고, 날씨와 시간대에 따라 달라지는 바다에서 낚시하고 요리하며 뗏목 위의 집을 꾸민다.",
+      features: ["물고기 37종, 비·폭풍·밤바다에만 나오는 희귀 어종", "도쿄, 시드니, 카이로, 남극까지 실제 항구 26곳", "뗏목 꾸미기, 50벌 넘는 의상, 고양이·강아지·수달·돌고래 펫", "바다 괴수와 대포 대결, 미니게임 15종, 친구 뗏목 방문"],
       image: "", youtube: "",
       links: [
         { label: "App Store", url: "https://apps.apple.com/us/app/water-world-story/id6781494299" },
@@ -204,7 +204,12 @@ const ART = {
   portal:        { src: "assets/portal.png",       w: 48, h: 64 }
 };
 const IMG = {};
-for (const k in ART) { const im = new Image(); im.onload = () => IMG[k] = im; im.src = ART[k].src; }
+// PNG가 없으면 같은 이름의 SVG를 시도 (SVG는 width/height 속성 필수)
+for (const k in ART) {
+  const im = new Image(); im.onload = () => IMG[k] = im;
+  im.onerror = () => { if (!im.dataset.svg) { im.dataset.svg = 1; im.src = ART[k].src.replace(/\.png$/, '.svg'); } };
+  im.src = ART[k].src;
+}
 
 /* =====================================================================
    3) 엔진

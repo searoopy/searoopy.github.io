@@ -6,6 +6,16 @@
 
 ---
 
+## 파일 형식: SVG 권장
+
+코드는 `assets/이름.png`를 먼저 찾고, 없으면 **`assets/이름.svg`**를 불러와. Codex 클라우드 PR은 바이너리 파일을 못 올리니 **SVG로 만들어 줘.**
+
+- 픽셀 하나 = `<rect width="1" height="1">` 하나 (가로로 같은 색이 이어지면 width를 늘려 합쳐도 됨)
+- 루트에 반드시 `width`, `height`, `viewBox`를 픽셀 크기 그대로 넣고 `shape-rendering="crispEdges"`를 붙일 것
+  예: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="48" viewBox="0 0 32 48" shape-rendering="crispEdges">`
+- 손으로 rect를 나열하기보다 `tools/art/` 폴더에 **문자 격자(팔레트 + 문자열 배열) → SVG로 변환하는 스크립트**를 만들어 쓰는 걸 추천. 원본 격자도 같이 커밋해 두면 나중에 고치기 쉬워
+- 파일 하나에 너무 큰 용량(50KB 이상)이 되지 않게 같은 색 rect는 합칠 것
+
 ## 공통 규칙
 
 - **스타일**: 16비트 느낌의 픽셀 아트. 안티앨리어싱은 쓰지 않고 외곽선은 1px.
