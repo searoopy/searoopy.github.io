@@ -466,7 +466,7 @@ function ground(id) { // 월드 좌표
 }
 
 function props(id) { // 월드 좌표, 바닥 기준
-  const sign = (x, label) => prop('sign', x, 220, (a, b, w, h) => { PH.sign(a, b, w, h); txt(label, a + w / 2, b + 10, 6, '#5a3d24'); });
+  const sign = (x, label) => { prop('sign', x, 220, PH.sign); txt(label, x + 24, 190, 6, '#5a3d24'); }; // 글씨는 그림 위에 항상 얹음
   if (id === 'lobby') {
     sign(100, '→ 출발');
     prop('about_board', 344, 220, PH.about_board);
@@ -476,6 +476,7 @@ function props(id) { // 월드 좌표, 바닥 기준
     sign(930, '출시작 01');
     for (const lx of [1000, 1300, 1500, 1760, 2100]) prop('lantern', lx, 120, PH.lantern);
     prop('debt_board', 1400, 220, PH.debt_board);
+    if (IMG.debt_board) { txt('남은 빚', 1436, 188, 6, '#ff9a9a'); txt('₩' + (999999999 - (time * 37) % 999999999).toLocaleString(), 1436, 199, 6, '#ff3b3b'); }
     prop('mine_office', 1860, 220, PH.mine_office);
   }
   if (id === 'shiba') {
