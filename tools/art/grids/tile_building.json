@@ -1,0 +1,27 @@
+{
+  "width": 32,
+  "height": 16,
+  "palette": {
+    "a": "#6f6870",
+    "b": "#a09584",
+    "c": "#e8d3af"
+  },
+  "rows": [
+    "ccccccccccccccccbbbbbbbbbbbbbbbb",
+    "bbbbbbbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbbbbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "aaaaaaaaaaaaaaaabbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbaabbbbbbbacbbbbbaabbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbacbbbbbbbbbbbbbbacbbbbbbbbbb",
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "width": 12,
+  "height": 20,
+  "palette": {
+    "a": "#202039",
+    "b": "#6d5e58",
+    "c": "#895b32",
+    "d": "#a78d65",
+    "e": "#d79836",
+    "f": "#ffc85c",
+    "g": "#fff1cf"
+  },
+  "rows": [
+    "............",
+    "....aaaa....",
+    "....a..a....",
+    "....a..a....",
+    ".aaaaaaaaaa.",
+    ".abbbbbbbba.",
+    ".aaaaaaaaaa.",
+    "..aaaaaaca..",
+    "..afggffca..",
+    "..afggffca..",
+    "..afggffca..",
+    "..afggffca..",
+    "..afggffca..",
+    "..afggffca..",
+    "..afffffca..",
+    "..aeeeeeca..",
+    "..aaaaaaaa..",
+    ".aaaaaaaaaa.",
+    ".adddddddda.",
+    ".aaaaaaaaaa."
+  ]
+}
