@@ -1,0 +1,27 @@
+{
+  "width": 56,
+  "height": 12,
+  "palette": {
+    "a": "#202039",
+    "b": "#5c4944",
+    "c": "#765040",
+    "d": "#b17b4f",
+    "e": "#d59b62",
+    "f": "#dcc599",
+    "g": "#f1c18a"
+  },
+  "rows": [
+    ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.",
+    "agggggdaagggggdaagggggdaagggggdaagggggdaagggggdaagggggda",
+    "addddddaaddddddaaddddddaaddddddaaddddddaaddddddaadddddda",
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "ffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "adeddddaadeddddaadeddddaadeddddaadeddddaadeddddaadedddda",
+    "adeddcdaadeddcdaadeddcdaadeddcdaadeddcdaadeddcdaadeddcda",
+    "adeddcdaadeddcdaadeddcdaadeddcdaadeddcdaadeddcdaadeddcda",
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "ffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "addddddaaddddddaaddddddaaddddddaaddddddaaddddddaadddddda",
+    ".aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa."
+  ]
+}

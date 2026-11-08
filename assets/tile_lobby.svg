@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" viewBox="0 0 32 16" shape-rendering="crispEdges">
+<g fill="#403650">
+<rect x="0" y="3" width="32" height="1"/>
+<rect x="7" y="4" width="1" height="7"/>
+<rect x="23" y="4" width="1" height="7"/>
+<rect x="0" y="11" width="32" height="1"/>
+<rect x="3" y="12" width="1" height="3"/>
+<rect x="19" y="12" width="1" height="3"/>
+</g>
+<g fill="#665077">
+<rect x="16" y="0" width="16" height="1"/>
+<rect x="0" y="1" width="32" height="2"/>
+<rect x="0" y="5" width="7" height="6"/>
+<rect x="8" y="5" width="15" height="6"/>
+<rect x="24" y="5" width="8" height="6"/>
+<rect x="0" y="13" width="3" height="2"/>
+<rect x="4" y="13" width="15" height="2"/>
+<rect x="20" y="13" width="12" height="2"/>
+<rect x="0" y="15" width="32" height="1"/>
+</g>
+<g fill="#b291a5">
+<rect x="0" y="0" width="16" height="1"/>
+<rect x="0" y="4" width="7" height="1"/>
+<rect x="8" y="4" width="15" height="1"/>
+<rect x="24" y="4" width="8" height="1"/>
+<rect x="0" y="12" width="3" height="1"/>
+<rect x="4" y="12" width="15" height="1"/>
+<rect x="20" y="12" width="12" height="1"/>
+</g>
+</svg>
