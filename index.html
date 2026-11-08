@@ -201,7 +201,21 @@ const ART = {
   sofa:          { src: "assets/sofa.png",         w: 40, h: 24 },
   mailbox:       { src: "assets/mailbox.png",      w: 32, h: 48 },
   flag:          { src: "assets/flag.png",         w: 32, h: 64 },
-  portal:        { src: "assets/portal.png",       w: 48, h: 64 }
+  portal:        { src: "assets/portal.png",       w: 48, h: 64 },
+  // ---- 각 게임 저장소에서 가져온 원본 스프라이트 (assets/game/) ----
+  ug_gate: { src: "assets/game/ug_gate.png", w: 81, h: 81 },
+  ug_hero: { src: "assets/game/ug_hero.png", fw: 23, fh: 25, frames: 7 },
+  ug_cart: { src: "assets/game/ug_cart.png", w: 23, h: 30 },
+  ug_npc: { src: "assets/game/ug_npc.png", w: 20, h: 35 },
+  ug_light: { src: "assets/game/ug_light.png", w: 6, h: 18 },
+  hd_logo: { src: "assets/game/hd_logo.png", w: 160, h: 41 },
+  hd_car: { src: "assets/game/hd_car.png", w: 74, h: 58 },
+  hd_bulldog: { src: "assets/game/hd_bulldog.png", w: 48, h: 27 },
+  hd_dog: { src: "assets/game/hd_dog.png", w: 40, h: 46 },
+  ww_boat: { src: "assets/game/ww_boat.png", w: 120, h: 44 },
+  ww_girl: { src: "assets/game/ww_girl.png", w: 28, h: 32 },
+  ww_fish: { src: "assets/game/ww_fish.png", w: 58, h: 21 },
+  ww_busan: { src: "assets/game/ww_busan.png", w: 64, h: 41 },
 };
 const IMG = {};
 // PNG가 없으면 같은 이름의 SVG를 시도 (SVG는 width/height 속성 필수)
@@ -224,15 +238,15 @@ function resize() {
 }
 addEventListener('resize', resize); resize();
 
-const GROUND = 220, WORLD = 3500;
+const GROUND = 220, WORLD = 2420;
 const G = CONFIG.games;
 const ZONES = [
-  { id: 'lobby',    x0: 0,    x1: 500,  name: "로비",            sub: CONFIG.studio },
-  { id: 'mine',     x0: 500,  x1: 1100, name: "출시작 01",       sub: G.underground.title },
-  { id: 'shiba',    x0: 1100, x1: 1700, name: "출시작 02",       sub: G.shiba.title },
-  { id: 'building', x0: 1700, x1: 2380, name: "개발 중 01",      sub: G.building.title },
-  { id: 'sea',      x0: 2380, x1: 3000, name: "개발 중 02",      sub: G.sea.title },
-  { id: 'end',      x0: 3000, x1: WORLD, name: "출구",           sub: "연락처 · 처음으로" }
+  { id: 'lobby',    x0: 0,    x1: 320,  name: "로비",            sub: CONFIG.studio },
+  { id: 'mine',     x0: 320,  x1: 740, name: "출시작 01",       sub: G.underground.title },
+  { id: 'shiba',    x0: 740,  x1: 1160, name: "출시작 02",       sub: G.shiba.title },
+  { id: 'building', x0: 1160, x1: 1680, name: "개발 중 01",      sub: G.building.title },
+  { id: 'sea',      x0: 1680, x1: 2120, name: "개발 중 02",      sub: G.sea.title },
+  { id: 'end',      x0: 2120, x1: WORLD, name: "출구",           sub: "연락처 · 처음으로" }
 ];
 const PAL = {
   lobby:    { sky: ['#2c2058', '#f3a2b4'], top: '#9b7fd9', fill: '#3d2e6e' },
@@ -243,34 +257,34 @@ const PAL = {
   end:      { sky: ['#3a2a6a', '#ffcf9e'], top: '#7fbf7a', fill: '#4b7a48' }
 };
 
-// --- 지형 (구역마다 점프 구간 하나씩) ---
+// --- 지형: 바닥은 끝까지 이어짐, 점프는 선택 ---
 const solids = [
-  { x: 0, y: 220, w: WORLD, h: 80 },             // 바닥은 끝까지 이어짐 (떨어지는 구간 없음)
-  { x: 784, y: 204, w: 52, h: 16, plat: 'minecart' }, // 넘거나 올라타는 광차
-  { x: 1900, y: 172, w: 140, h: 48 },           // 빌딩 옥상 1
-  { x: 2080, y: 148, w: 80, h: 72 },
-  { x: 2190, y: 172, w: 110, h: 48 },           // 빌딩 옥상 2 (공사 현장)
-  { x: 2584, y: 208, w: 52, h: 12, plat: 'raft' }    // 부두 위 뗏목
+  { x: 0, y: 220, w: WORLD, h: 80 },
+  { x: 520, y: 190, w: 23, h: 30, obj: true },           // 지하노역소 광차
+  { x: 1320, y: 172, w: 80, h: 48 },           // 빌딩 옥상 1
+  { x: 1420, y: 148, w: 60, h: 72 },
+  { x: 1500, y: 172, w: 100, h: 48 },          // 빌딩 옥상 2 (공사 현장)
+  { x: 1840, y: 202, w: 120, h: 18, obj: true } // 잘자 바다야 뗏목
 ];
-for (let i = 0; i < 5; i++) solids.push({ x: 1820 + 16 * i, y: 212 - 8 * i, w: 16, h: 8 + 8 * i });
-for (let i = 0; i < 5; i++) solids.push({ x: 2300 + 16 * i, y: 180 + 8 * i, w: 16, h: 40 - 8 * i });
+for (let i = 0; i < 5; i++) solids.push({ x: 1240 + 16 * i, y: 212 - 8 * i, w: 16, h: 8 + 8 * i });
+for (let i = 0; i < 5; i++) solids.push({ x: 1600 + 16 * i, y: 180 + 8 * i, w: 16, h: 40 - 8 * i });
 const GAPS = [];
 
 // --- 살펴볼 수 있는 곳 ---
 const spots = [
-  { x: 200,  w: 72, y: 148, h: 72, kind: 'about', label: 'ABOUT' },
-  { x: 920,  w: 96, y: 140, h: 80, kind: 'game', id: 'underground', label: '노역소 사무실' },
-  { x: 1380, w: 96, y: 164, h: 56, kind: 'game', id: 'shiba',       label: '트럭 타기' },
-  { x: 2200, w: 96, y: 92,  h: 80, kind: 'game', id: 'building',    label: '공사 현장' },
-  { x: 2780, w: 96, y: 140, h: 80, kind: 'game', id: 'sea',         label: '들어가 보기' },
-  { x: 3180, w: 32, y: 172, h: 48, kind: 'contact', label: '연락하기' },
-  { x: 3400, w: 48, y: 156, h: 64, kind: 'restart', label: '처음으로' }
+  { x: 150,  w: 72,  y: 148, h: 72, kind: 'about', label: 'ABOUT' },
+  { x: 630,  w: 81,  y: 139, h: 81, kind: 'game', id: 'underground', label: '광산 입구' },
+  { x: 960,  w: 74,  y: 162, h: 58, kind: 'game', id: 'shiba',       label: '트럭 타기' },
+  { x: 1500, w: 96,  y: 92,  h: 80, kind: 'game', id: 'building',    label: '공사 현장' },
+  { x: 1840, w: 120, y: 150, h: 70, kind: 'game', id: 'sea',         label: '말 걸기' },
+  { x: 2220, w: 32,  y: 172, h: 48, kind: 'contact', label: '연락하기' },
+  { x: 2360, w: 48,  y: 156, h: 64, kind: 'restart', label: '처음으로' }
 ];
-const coins = [[310,200],[360,200],[810,176],[1060,200],[1220,200],[1620,200],[1960,150],[2120,124],[2610,184],[2920,200],[3100,200]]
+const coins = [[290,200],[531,176],[830,200],[1360,150],[1450,124],[1880,180],[2060,200],[2180,200]]
   .map(([x, y]) => ({ x, y, got: false }));
 
 // --- 플레이어 ---
-const P = { x: 90, y: GROUND - 26, w: 14, h: 26, vx: 0, vy: 0, on: false, face: 1, t: 0, safeX: 90, coy: 0, buf: 0 };
+const P = { x: 70, y: GROUND - 26, w: 14, h: 26, vx: 0, vy: 0, on: false, face: 1, t: 0, safeX: 70, coy: 0, buf: 0 };
 const SPEED = 2.6, JUMP = 8.4, GRAV = 0.45;
 const keys = {}, touch = { l: false, r: false };
 let camX = 0, started = false, paused = false, time = 0, zoneNow = null, near = null;
@@ -436,7 +450,7 @@ function sky(id, sx0, sx1) {
     for (let i = 0; i < 40; i++) { const bw = 24 + r() * 26, bh = 40 + r() * 80, bx = i * 44 - (camX * .3) % 44 - 44; R(bx, 220 - bh, bw, bh, '#7fa3bf'); for (let wy = 220 - bh + 6; wy < 210; wy += 10) R(bx + 5, wy, bw - 10, 3, '#a9c7dd'); }
   } else if (id === 'building') { // 노을 + 계속 자라는 초고층 빌딩
     for (let i = 0; i < 40; i++) { const bw = 22 + r() * 26, bh = 30 + r() * 60, bx = i * 44 - (camX * .3) % 44 - 44; R(bx, 220 - bh, bw, bh, '#c46a5a'); }
-    const tx = (2100 - camX) * .4 + VW * .4, floors = 8 + Math.floor(time / 90) % 30;
+    const tx = (1450 - camX) * .4 + VW * .4, floors = 8 + Math.floor(time / 90) % 30;
     for (let f = 0; f < floors; f++) { const fy = 220 - 10 - f * 8; R(tx, fy, 70, 8, f % 2 ? '#6e7f99' : '#7d8eaa'); for (let c = 0; c < 6; c++) R(tx + 4 + c * 11, fy + 2, 7, 4, (f + c) % 5 ? '#ffd38a' : '#3d4a60'); }
     R(tx + 30, 220 - 10 - floors * 8 - 10, 10, 10, '#ff5d73');
   } else if (id === 'sea') { // 밤바다, 달, 별
@@ -450,6 +464,7 @@ function sky(id, sx0, sx1) {
 function ground(id) { // 월드 좌표
   const p = PAL[id], im = IMG['tile_' + id];
   for (const s of solids) {
+    if (s.obj) continue; // 그림은 props()에서 그림
     if (s.plat) { const bob = 0; prop(s.plat, s.x - 2, s.y + ART[s.plat].h - 2 + bob, PH[s.plat]); continue; }
     if (im) {
       for (let x = s.x; x < s.x + s.w; x += 16) { ctx.drawImage(im, 0, 0, 16, 16, x, s.y, 16, 16); for (let y = s.y + 16; y < 300; y += 16) ctx.drawImage(im, 16, 0, 16, 16, x, y, 16, 16); }
@@ -462,39 +477,48 @@ function ground(id) { // 월드 좌표
 }
 
 function props(id) { // 월드 좌표, 바닥 기준
-  const sign = (x, label) => { prop('sign', x, 220, PH.sign); txt(label, x + 24, 190, 6, '#5a3d24'); }; // 글씨는 그림 위에 항상 얹음
+  const sign = (x, label) => { prop('sign', x, 220, PH.sign); txt(label, x + 24, 190, 6, '#5a3d24'); };
+  const img = (k, x, yb) => { const a = ART[k], im = IMG[k]; if (im) ctx.drawImage(im, Math.round(x), Math.round(yb - a.h), a.w, a.h); };
   if (id === 'lobby') {
-    sign(30, '→ 출발');
-    prop('about_board', 200, 220, PH.about_board);
-    prop('arcade', 400, 220, PH.arcade); prop('arcade', 436, 220, PH.arcade);
+    sign(20, '→ 출발');
+    prop('about_board', 150, 220, PH.about_board);
+    prop('arcade', 250, 220, PH.arcade);
   }
-  if (id === 'mine') {
-    sign(520, '출시작 01');
-    for (const lx of [600, 800, 1000]) prop('lantern', lx, 120, PH.lantern);
-    prop('debt_board', 640, 220, PH.debt_board);
-    if (IMG.debt_board) { txt('남은 빚', 676, 188, 6, '#ff9a9a'); txt('₩' + (999999999 - (time * 37) % 999999999).toLocaleString(), 676, 199, 6, '#ff3b3b'); }
-    prop('mine_office', 920, 220, PH.mine_office);
+  if (id === 'mine') { // 지하노역소 원본 스프라이트
+    sign(330, '출시작 01');
+    for (const lx of [420, 560, 700]) { R(lx + 2, 0 - OY, 1, 60 + OY, '#2a1d14'); img('ug_light', lx, 78); }
+    prop('debt_board', 400, 220, PH.debt_board);
+    if (IMG.debt_board) { txt('남은 빚', 436, 188, 6, '#ff9a9a'); txt('₩' + (999999999 - (time * 37) % 999999999).toLocaleString(), 436, 199, 6, '#ff3b3b'); }
+    img('ug_cart', 520, 220);
+    const hx = 560 + Math.sin(time * .012) * 26, hf = Math.floor(time / 8) % ART.ug_hero.frames, dir = Math.cos(time * .012) >= 0 ? 1 : -1;
+    if (IMG.ug_hero) { ctx.save(); ctx.translate(Math.round(hx), 220); ctx.scale(dir, 1); ctx.drawImage(IMG.ug_hero, hf * 23, 0, 23, 25, -11, -25, 23, 25); ctx.restore(); }
+    img('ug_npc', 606, 220);
+    img('ug_gate', 630, 220);
   }
-  if (id === 'shiba') {
-    sign(1120, '출시작 02');
-    for (const cx of [1260, 1276, 1560, 1576]) prop('cone', cx, 220, PH.cone);
-    prop('jeep', 1380, 220, PH.jeep);
+  if (id === 'shiba') { // 시바트럭 원본 스프라이트
+    sign(750, '출시작 02');
+    img('hd_logo', 820, 140 + Math.sin(time * .05) * 2);
+    img('hd_bulldog', 880, 220);
+    img('hd_car', 960, 220 + (time % 20 < 10 ? 0 : -1));
+    img('hd_dog', 1080, 220);
   }
   if (id === 'building') {
-    sign(1720, '개발 중 01');
-    prop('crane', 1760, 220, PH.crane);
-    prop('building_site', 2200, 172, PH.building_site);
+    sign(1170, '개발 중 01');
+    prop('crane', 1180, 220, PH.crane);
+    prop('building_site', 1500, 172, PH.building_site);
   }
-  if (id === 'sea') {
-    sign(2400, '개발 중 02');
-    prop('sofa', 2470, 220, PH.sofa);
-    prop('sea_house', 2780, 220, PH.sea_house);
+  if (id === 'sea') { // 잘자, 바다야 원본 스프라이트
+    sign(1690, '개발 중 02');
+    img('ww_busan', 1750, 220);
+    const ft = (time % 240) / 60; if (ft < 1) img('ww_fish', 2010, 160 - Math.sin(ft * Math.PI) * 40);
+    img('ww_boat', 1840, 224);
+    img('ww_girl', 1910, 202 + Math.round(Math.sin(time * .04)));
   }
   if (id === 'end') {
-    sign(3030, '더 만드는 중!');
-    prop('mailbox', 3180, 220, PH.mailbox);
-    prop('flag', 3300, 220, PH.flag);
-    prop('portal', 3400, 220, PH.portal);
+    sign(2130, '더 만드는 중!');
+    prop('mailbox', 2220, 220, PH.mailbox);
+    prop('flag', 2300, 220, PH.flag);
+    prop('portal', 2360, 220, PH.portal);
   }
 }
 
@@ -575,7 +599,7 @@ function interact() {
   if (near.kind === 'game') openModal(gameHTML(CONFIG.games[near.id]));
   else if (near.kind === 'about') openModal(aboutHTML());
   else if (near.kind === 'contact') openModal(contactHTML());
-  else if (near.kind === 'restart') { puff(P.x + 7, P.y + 10, 20, '#b9a6ff', 2.5); beep(440, .15, 'triangle'); P.x = P.safeX = 90; P.y = GROUND - 60; P.vy = 0; camX = 0; }
+  else if (near.kind === 'restart') { puff(P.x + 7, P.y + 10, 20, '#b9a6ff', 2.5); beep(440, .15, 'triangle'); P.x = P.safeX = 70; P.y = GROUND - 60; P.vy = 0; camX = 0; }
 }
 function openList() {
   const gs = Object.entries(CONFIG.games);
