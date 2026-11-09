@@ -36,6 +36,8 @@
   .media{aspect-ratio:16/9;border:3px solid var(--ink);margin-bottom:16px;background:#222;overflow:hidden}
   .media img,.media iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
   .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,var(--c1),var(--c1) 14px,var(--c2) 14px,var(--c2) 28px);color:#fff;font-size:13px;text-shadow:1px 1px 0 #000}
+  .gallery{display:flex;gap:8px;overflow-x:auto;margin:-6px 0 16px;padding-bottom:6px}
+  .gallery img{height:220px;border:3px solid var(--ink);flex:none}
   .tag{display:inline-block;background:var(--g,var(--accent));color:#fff;padding:3px 8px;font-size:12px;margin-bottom:8px}
   .card h2{font-size:26px;margin-bottom:4px}
   .sub{font-size:14px;opacity:.75;margin-bottom:14px}
@@ -149,13 +151,14 @@ const CONFIG = {
       color: "#3c7dd9"
     },
     sea: {
-      title: "잘자, 바다야",
+      title: "잘 자, 바다야",
       genre: "모바일 · 힐링 항해 어드벤처",
       tagline: "뗏목 하나로 부산에서 세계의 바다까지",
       engine: "GameMaker", platform: "iOS · Android", status: "개발 중",
       description: "작은 뗏목을 타고 부산에서 출발해 세계 곳곳의 항구로 떠나는 픽셀 아트 항해 게임. 시간에 쫓기지 않고, 날씨와 시간대에 따라 달라지는 바다에서 낚시하고 요리하며 뗏목 위의 집을 꾸민다.",
       features: ["물고기 37종, 비·폭풍·밤바다에만 나오는 희귀 어종", "도쿄, 시드니, 카이로, 남극까지 실제 항구 26곳", "뗏목 꾸미기, 50벌 넘는 의상, 고양이·강아지·수달·돌고래 펫", "바다 괴수와 대포 대결, 미니게임 15종, 친구 뗏목 방문"],
       image: "", youtube: "wFxT0XRtjVQ",
+      gallery: ["01_hero_sunset", "02_fishing", "03_dive", "05_worldmap", "07_wardrobe", "08_decor", "09_storm", "10_night"].map(n => `assets/shots/sea/${n}.webp`),
       links: [
         { label: "홍보 숏츠", url: "https://youtube.com/shorts/wFxT0XRtjVQ" },
         { label: "App Store", url: "https://apps.apple.com/us/app/water-world-story/id6781494299" },
@@ -584,7 +587,8 @@ function media(g, c1 = '#333', c2 = '#444') {
 }
 const links = ls => `<div class="links">${ls.map(l => l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : `<span>${esc(l.label)} · 준비 중</span>`).join('')}</div>`;
 function gameHTML(g) {
-  return `<div style="--g:${g.color}">${media(g, g.color, '#222')}<span class="tag">${esc(g.genre)}</span><h2>${esc(g.title)}</h2><p class="sub">${esc(g.tagline)}</p>
+  const gal = g.gallery ? `<div class="gallery">${g.gallery.map(src => `<img src="${esc(src)}" alt="" loading="lazy">`).join('')}</div>` : '';
+  return `<div style="--g:${g.color}">${media(g, g.color, '#222')}${gal}<span class="tag">${esc(g.genre)}</span><h2>${esc(g.title)}</h2><p class="sub">${esc(g.tagline)}</p>
   <ul class="meta"><li><b>상태</b>${esc(g.status)}</li>${g.platform ? `<li><b>플랫폼</b>${esc(g.platform)}</li>` : ''}</ul>
   <p class="desc">${esc(g.description)}</p><ul class="feat">${g.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>${links(g.links)}</div>`;
 }
