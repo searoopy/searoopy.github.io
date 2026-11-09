@@ -99,7 +99,6 @@ const CONFIG = {
     name: "GuRis",
     role: "1인 인디 게임 개발사",
     bio: "혼자서 기획·개발·출시까지 하는 1인 게임 개발사입니다. 방치형 스토리 게임부터 차량 전투 액션까지, 실험적인 모바일 게임을 만들고 있어요.",
-    skills: ["GameMaker", "Unreal Engine 5 (Blueprint)", "모바일 출시 · 운영"],
     photo: ""   // 예: "assets/shots/me.png"
   },
   contact: [
@@ -116,7 +115,7 @@ const CONFIG = {
       engine: "", platform: "iOS · Android", status: "출시",
       description: "큰 빚을 지고 지하 노역소에 끌려온 청년이 일해서 빚을 갚고 자유를 되찾는 이야기. 방치형 게임에 스토리를 얹어, 숨겨진 단서와 장비를 모으고 노역소 사람들과 대화하며 탈출로를 찾아간다.",
       features: ["스토리와 여러 엔딩, 숨겨진 이스터에그", "옛날 오락실 느낌의 다양한 미니게임", "클라우드 저장 지원"],
-      image: "", youtube: "",
+      image: "assets/shots/underground.png", youtube: "",
       links: [
         { label: "App Store", url: "https://apps.apple.com/kr/app/id1546968607" },
         { label: "다운로드 (iOS · Android)", url: "https://onelink.to/s9wnc5" },
@@ -131,7 +130,7 @@ const CONFIG = {
       engine: "", platform: "iOS · Android", status: "출시",
       description: "강아지 특공대와 함께 군용 지프를 타고 도로를 질주하며 적과 거대 괴수를 물리치는 액션 게임. 달릴 때마다 스킬을 모아 강해지고, 영구 업그레이드와 장비, 새 차량은 다음 판에도 이어진다.",
       features: ["람보 퍼그, 오토바이 불독 등 강아지 특공대와 드론 부대", "도심, 차이나타운, 교토, 아키하바라, 고대 아테네까지 세계 각지의 괴수 보스", "노멀부터 헬까지 난이도 4단계, 전 세계 일일 랭킹"],
-      image: "", youtube: "",
+      image: "assets/shots/shiba.png", youtube: "",
       links: [
         { label: "App Store", url: "https://apps.apple.com/us/app/shiba-truck/id6787904572" },
         { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.guris.humvdogslegend2" }
@@ -156,8 +155,9 @@ const CONFIG = {
       engine: "GameMaker", platform: "iOS · Android", status: "개발 중",
       description: "작은 뗏목을 타고 부산에서 출발해 세계 곳곳의 항구로 떠나는 픽셀 아트 항해 게임. 시간에 쫓기지 않고, 날씨와 시간대에 따라 달라지는 바다에서 낚시하고 요리하며 뗏목 위의 집을 꾸민다.",
       features: ["물고기 37종, 비·폭풍·밤바다에만 나오는 희귀 어종", "도쿄, 시드니, 카이로, 남극까지 실제 항구 26곳", "뗏목 꾸미기, 50벌 넘는 의상, 고양이·강아지·수달·돌고래 펫", "바다 괴수와 대포 대결, 미니게임 15종, 친구 뗏목 방문"],
-      image: "", youtube: "",
+      image: "", youtube: "wFxT0XRtjVQ",
       links: [
+        { label: "홍보 숏츠", url: "https://youtube.com/shorts/wFxT0XRtjVQ" },
         { label: "App Store", url: "https://apps.apple.com/us/app/water-world-story/id6781494299" },
         { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.guris.waterworld" }
       ],
@@ -203,6 +203,11 @@ const ART = {
   flag:          { src: "assets/flag.png",         w: 32, h: 64 },
   portal:        { src: "assets/portal.png",       w: 48, h: 64 },
   // ---- 각 게임 저장소에서 가져온 원본 스프라이트 (assets/game/) ----
+  ww_boat: { src: "assets/game/ww_boat.png", w: 119, h: 32 },
+  ww_girl: { src: "assets/game/ww_girl.png", w: 25, h: 34 },
+  ww_girl_walk: { src: "assets/game/ww_girl_walk.png", fw: 16, fh: 35, frames: 4 },
+  ww_whale: { src: "assets/game/ww_whale.png", w: 109, h: 22 },
+  guris_logo: { src: "assets/game/guris_logo.png", w: 120, h: 49 },
   ug_gate: { src: "assets/game/ug_gate.png", w: 81, h: 81 },
   ug_hero: { src: "assets/game/ug_hero.png", fw: 23, fh: 25, frames: 7 },
   ug_cart: { src: "assets/game/ug_cart.png", w: 23, h: 30 },
@@ -212,10 +217,6 @@ const ART = {
   hd_car: { src: "assets/game/hd_car.png", w: 74, h: 58 },
   hd_bulldog: { src: "assets/game/hd_bulldog.png", w: 48, h: 27 },
   hd_dog: { src: "assets/game/hd_dog.png", w: 40, h: 46 },
-  ww_boat: { src: "assets/game/ww_boat.png", w: 120, h: 44 },
-  ww_girl: { src: "assets/game/ww_girl.png", w: 28, h: 32 },
-  ww_fish: { src: "assets/game/ww_fish.png", w: 58, h: 21 },
-  ww_busan: { src: "assets/game/ww_busan.png", w: 64, h: 41 },
 };
 const IMG = {};
 // PNG가 없으면 같은 이름의 SVG를 시도 (SVG는 width/height 속성 필수)
@@ -264,7 +265,7 @@ const solids = [
   { x: 1320, y: 172, w: 80, h: 48 },           // 빌딩 옥상 1
   { x: 1420, y: 148, w: 60, h: 72 },
   { x: 1500, y: 172, w: 100, h: 48 },          // 빌딩 옥상 2 (공사 현장)
-  { x: 1840, y: 202, w: 120, h: 18, obj: true } // 잘자 바다야 뗏목
+  { x: 1840, y: 198, w: 119, h: 22, obj: true } // 잘자 바다야 뗏목
 ];
 for (let i = 0; i < 5; i++) solids.push({ x: 1240 + 16 * i, y: 212 - 8 * i, w: 16, h: 8 + 8 * i });
 for (let i = 0; i < 5; i++) solids.push({ x: 1600 + 16 * i, y: 180 + 8 * i, w: 16, h: 40 - 8 * i });
@@ -481,6 +482,7 @@ function props(id) { // 월드 좌표, 바닥 기준
   const img = (k, x, yb) => { const a = ART[k], im = IMG[k]; if (im) ctx.drawImage(im, Math.round(x), Math.round(yb - a.h), a.w, a.h); };
   if (id === 'lobby') {
     sign(20, '→ 출발');
+    img('guris_logo', 100, 118 + Math.sin(time * .04) * 2);
     prop('about_board', 150, 220, PH.about_board);
     prop('arcade', 250, 220, PH.arcade);
   }
@@ -507,12 +509,13 @@ function props(id) { // 월드 좌표, 바닥 기준
     prop('crane', 1180, 220, PH.crane);
     prop('building_site', 1500, 172, PH.building_site);
   }
-  if (id === 'sea') { // 잘자, 바다야 원본 스프라이트
+  if (id === 'sea') { // 잘자, 바다야 최신 스프라이트 (세일러 기본 의상)
     sign(1690, '개발 중 02');
-    img('ww_busan', 1750, 220);
-    const ft = (time % 240) / 60; if (ft < 1) img('ww_fish', 2010, 160 - Math.sin(ft * Math.PI) * 40);
-    img('ww_boat', 1840, 224);
-    img('ww_girl', 1910, 202 + Math.round(Math.sin(time * .04)));
+    const wx = 1700 + ((time * .25) % 560); img('ww_whale', wx, 186 + Math.sin(time * .03) * 2);
+    img('ww_boat', 1840, 222);
+    img('ww_girl', 1900, 200 + Math.round(Math.sin(time * .04)));
+    const gx = 2030 + Math.sin(time * .01) * 40, gd = Math.cos(time * .01) >= 0 ? 1 : -1, gf = Math.floor(time / 10) % ART.ww_girl_walk.frames;
+    if (IMG.ww_girl_walk) { ctx.save(); ctx.translate(Math.round(gx), 220); ctx.scale(gd, 1); ctx.drawImage(IMG.ww_girl_walk, gf * 16, 0, 16, 35, -8, -35, 16, 35); ctx.restore(); }
   }
   if (id === 'end') {
     sign(2130, '더 만드는 중!');
@@ -582,13 +585,13 @@ function media(g, c1 = '#333', c2 = '#444') {
 const links = ls => `<div class="links">${ls.map(l => l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : `<span>${esc(l.label)} · 준비 중</span>`).join('')}</div>`;
 function gameHTML(g) {
   return `<div style="--g:${g.color}">${media(g, g.color, '#222')}<span class="tag">${esc(g.genre)}</span><h2>${esc(g.title)}</h2><p class="sub">${esc(g.tagline)}</p>
-  <ul class="meta"><li><b>상태</b>${esc(g.status)}</li>${g.platform ? `<li><b>플랫폼</b>${esc(g.platform)}</li>` : ''}${g.engine ? `<li><b>엔진</b>${esc(g.engine)}</li>` : ''}</ul>
+  <ul class="meta"><li><b>상태</b>${esc(g.status)}</li>${g.platform ? `<li><b>플랫폼</b>${esc(g.platform)}</li>` : ''}</ul>
   <p class="desc">${esc(g.description)}</p><ul class="feat">${g.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>${links(g.links)}</div>`;
 }
 function aboutHTML() {
   const a = CONFIG.about;
   return `${a.photo ? `<div class="media" style="aspect-ratio:1;max-width:160px"><img src="${esc(a.photo)}" alt=""></div>` : ''}<span class="tag">ABOUT ME</span><h2>${esc(a.name)}</h2><p class="sub">${esc(a.role)}</p>
-  <p class="desc">${esc(a.bio)}</p><ul class="meta">${a.skills.map(s => `<li>${esc(s)}</li>`).join('')}</ul>${links(CONFIG.contact)}`;
+  <p class="desc">${esc(a.bio)}</p>${links(CONFIG.contact)}`;
 }
 const contactHTML = () => `<span class="tag">CONTACT</span><h2>연락하기</h2><p class="sub">협업 · 문의 · 피드백 모두 환영해요</p>${links(CONFIG.contact)}`;
 
