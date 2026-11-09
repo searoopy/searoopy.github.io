@@ -34,6 +34,7 @@
   .card{background:var(--paper);color:var(--ink);border:3px solid var(--ink);box-shadow:8px 8px 0 #000;max-width:640px;width:100%;max-height:88vh;overflow:auto;position:relative;padding:22px}
   .card .x{position:absolute;top:10px;right:10px;background:var(--ink);color:var(--paper);border:0;width:32px;height:32px;font-size:16px}
   .media{aspect-ratio:16/9;border:3px solid var(--ink);margin-bottom:16px;background:#222;overflow:hidden}
+  .media video{width:100%;height:100%;object-fit:contain;background:#0d1530;display:block}
   .media img,.media iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
   .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,var(--c1),var(--c1) 14px,var(--c2) 14px,var(--c2) 28px);color:#fff;font-size:13px;text-shadow:1px 1px 0 #000}
   .gallery{display:flex;gap:8px;overflow-x:auto;margin:-6px 0 16px;padding-bottom:6px}
@@ -140,13 +141,15 @@ const CONFIG = {
       color: "#e0782a"
     },
     building: {
-      title: "세계최고의 빌딩 키우기",
-      genre: "모바일 · 키우기",
-      tagline: "한 층씩 올려 세계에서 가장 높은 빌딩으로",
-      engine: "", platform: "모바일", status: "개발 중",
-      description: "빈 땅에서 시작해 한 층씩 빌딩을 올리는 키우기 게임. 층을 늘리고 가게와 입주자를 채워 수익을 내고, 그 돈으로 다시 더 높이 올린다. 목표는 단 하나, 세계 최고의 빌딩.",
-      features: ["한 층씩 쌓아 올리는 성장의 재미", "층마다 다른 가게와 입주자", "세계 최고 높이에 도전"],
+      title: "세계 최고의 빌딩 키우기",
+      genre: "모바일 · 방치형 타워",
+      tagline: "200층 마천루를 세우는 방치형 건물주 게임",
+      platform: "iOS · Android", status: "개발 중",
+      description: "1층 작은 빵집에서 시작해 구름 위 200층까지. 매장을 들이고 매니저를 고용하고 엘리베이터로 손님을 위층으로 실어 나르면, 게임을 꺼 둔 사이에도 돈이 쌓이며 빌딩이 높아진다.",
+      features: ["20층마다 열리는 새 구역: 오피스, 호텔, 방송, 테크, 스카이 다이닝, 우주 항공", "서울에서 부산, 도쿄, 싱가포르, 뉴욕, 두바이까지 6개 도시", "밤이면 창마다 불이 켜지고 비·눈·안개가 바뀌는 빌딩의 하루", "랭킹에서 다른 건물주의 빌딩을 실제 모습 그대로 구경"],
       image: "", youtube: "",
+      video: "assets/shots/building/trailer.mp4", poster: "assets/shots/building/poster.jpg",
+      gallery: [1, 2, 3, 4, 5, 6, 7].map(n => `assets/shots/building/phone_0${n}.webp`),
       links: [{ label: "출시 알림", url: "" }],
       color: "#3c7dd9"
     },
@@ -581,6 +584,7 @@ function hud() { $('hudL').textContent = `★ ${coins.filter(c => c.got).length}
 let toastT; function toast(a, b) { const t = $('toast'); t.querySelector('b').textContent = a; t.querySelector('span').textContent = b; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
 
 function media(g, c1 = '#333', c2 = '#444') {
+  if (g.video) return `<div class="media"><video src="${esc(g.video)}" poster="${esc(g.poster || '')}" muted autoplay loop playsinline controls></video></div>`;
   if (g.youtube) return `<div class="media"><iframe src="https://www.youtube.com/embed/${esc(g.youtube)}" allowfullscreen title="트레일러"></iframe></div>`;
   if (g.image) return `<div class="media"><img src="${esc(g.image)}" alt="${esc(g.title || '')}"></div>`;
   return `<div class="media"><div class="ph" style="--c1:${c1};--c2:${c2}"><span>스크린샷 · 트레일러 자리</span></div></div>`;
