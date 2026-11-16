@@ -101,7 +101,7 @@
   #shiba .copy p,#shiba .copy li{text-shadow:none;font-weight:500}
   #shiba .copy li{border-color:rgba(12,15,31,.25)}
   #shiba .copy li::before{background:#e0782a}
-  .road{position:relative;height:70px;margin-top:-6px;background:#4a4e55;box-shadow:0 0 0 4px #000,10px 10px 0 4px rgba(0,0,0,.55);overflow:hidden}
+  .road{position:relative;height:70px;margin-top:18px;background:#4a4e55;box-shadow:0 0 0 4px #000,10px 10px 0 4px rgba(0,0,0,.55);overflow:hidden}
   .road::before{content:"";position:absolute;left:0;right:0;top:34px;height:6px;background:repeating-linear-gradient(90deg,#f2d200 0 40px,transparent 40px 80px);animation:lane .5s linear infinite}
   @keyframes lane{to{transform:translateX(-80px)}}
   .road::before{width:calc(100% + 80px)}
@@ -124,7 +124,7 @@
   .debt{font-family:var(--px);margin-top:22px;display:inline-block;background:#1a0808;box-shadow:0 0 0 3px #000;padding:10px 14px}
   .debt span{display:block;font-size:12px;color:#ff9a9a}
   .debt b{font-size:clamp(20px,2.4vw,28px);color:#ff3b3b;font-variant-numeric:tabular-nums}
-  .walker{position:absolute;right:26px;bottom:-4px;width:23px;height:25px;background:url(assets/game/ug_hero.png) 0 0/161px 25px;transform:scale(4);transform-origin:right bottom;animation:walk .8s steps(7) infinite}
+  .walker{position:absolute;right:10px;bottom:-14px;width:23px;height:25px;background:url(assets/game/ug_hero.png) 0 0/161px 25px;transform:scale(4);transform-origin:right bottom;animation:walk .8s steps(7) infinite}
   @keyframes walk{to{background-position:-161px 0}}
   .mineframe{position:relative}
 
@@ -235,8 +235,8 @@
       <p>강아지 특공대와 군용 지프를 타고 도로를 질주하며 적과 거대 괴수를 물리치는 액션 게임. 달릴 때마다 스킬을 모아 강해지고, 업그레이드와 장비는 다음 판에도 이어집니다.</p>
       <ul>
         <li>람보 퍼그, 오토바이 불독, 그리고 드론 부대</li>
-        <li>도심, 차이나타운, 교토, 아키하바라, 고대 아테네의 괴수 보스</li>
-        <li>노멀부터 헬까지 난이도 4단계, 전 세계 일일 랭킹</li>
+        <li>세계를 누비는 38개 스테이지와 개성 넘치는 괴수 보스 군단</li>
+        <li>매 판 달라지는 강화 3택 1, 자동차 35종 수집</li>
       </ul>
       <div class="cta">
         <a class="btn hot" href="https://apps.apple.com/us/app/shiba-truck/id6787904572" target="_blank" rel="noopener">App Store에서 받기</a>
@@ -244,7 +244,19 @@
       </div>
     </div>
     <div class="media">
-      <div class="frame"><img class="px" src="assets/shots/shiba.png" width="390" height="220" alt="시바트럭 타이틀 화면: 불을 뿜는 괴수와 로고"></div>
+      <div class="duo">
+        <div class="phone"><video src="assets/shots/shiba/trailer.mp4" poster="assets/shots/shiba/poster.jpg" muted loop playsinline preload="none" aria-label="시바트럭 플레이 영상"></video></div>
+        <div class="strip" tabindex="0" aria-label="스크린샷">
+        <img src="assets/shots/shiba/01_hero.webp" alt="멍멍 특공대, 괴수를 막아라" loading="lazy">
+        <img src="assets/shots/shiba/04_boss.webp" alt="개성 넘치는 보스 군단" loading="lazy">
+        <img src="assets/shots/shiba/02_action.webp" alt="쏘고, 부수고, 너트를 쓸어 담자" loading="lazy">
+        <img src="assets/shots/shiba/05_barrage.webp" alt="쏟아지는 탄막을 피해라" loading="lazy">
+        <img src="assets/shots/shiba/03_pick.webp" alt="매 판 달라지는 강화 3택 1" loading="lazy">
+        <img src="assets/shots/shiba/06_world.webp" alt="세계를 누비는 38개 스테이지" loading="lazy">
+        <img src="assets/shots/shiba/07_garage.webp" alt="자동차 35종 수집" loading="lazy">
+        <img src="assets/shots/shiba/08_research.webp" alt="연구할수록 강해진다" loading="lazy">
+        </div>
+      </div>
       <div class="road" aria-hidden="true"><img class="truck px" src="assets/game/hd_car.png" width="37" height="29" alt=""></div>
     </div>
   </div>
@@ -292,8 +304,9 @@
       <h2>빚을 갚고 지하에서 탈출하라</h2>
       <p>큰 빚을 지고 지하 노역소에 끌려온 청년의 이야기. 일해서 빚을 갚는 방치형 게임에 스토리를 얹었습니다. 숨겨진 단서를 모으고 노역소 사람들과 대화하며 탈출로를 찾으세요.</p>
       <ul>
-        <li>여러 개의 엔딩과 숨겨진 이스터에그</li>
-        <li>옛날 오락실 느낌의 미니게임</li>
+        <li>동료들과 함께 캐는 지하 채굴, 모든 것이 모이는 지하 광장</li>
+        <li>거대 바위, 마물광산, 용암 속 보스전과 광산 방어전</li>
+        <li>로켓을 타고 달에서도 채굴, 뗏목을 이어 바다 건너 도시로</li>
       </ul>
       <div class="debt"><span>남은 빚</span><b id="debt">₩999,999,999</b></div>
       <div class="cta">
@@ -302,7 +315,20 @@
       </div>
     </div>
     <div class="media mineframe">
-      <div class="frame"><img class="px" src="assets/shots/underground.png" width="568" height="320" alt="지하노역소: 레일이 깔린 갱도"></div>
+      <div class="duo">
+        <div class="phone"><video src="assets/shots/mine/trailer.mp4" poster="assets/shots/mine/poster.jpg" muted loop playsinline preload="none" aria-label="지하노역소 플레이 영상"></video></div>
+        <div class="strip" tabindex="0" aria-label="스크린샷">
+        <img src="assets/shots/mine/01_mine.webp" alt="캐고, 모으고, 빚을 갚아라" loading="lazy">
+        <img src="assets/shots/mine/04_lobby.webp" alt="모든 것이 모이는 지하 광장" loading="lazy">
+        <img src="assets/shots/mine/02_boss_stone.webp" alt="거대 바위를 부숴라" loading="lazy">
+        <img src="assets/shots/mine/03_monster_mine.webp" alt="마물광산 보스전" loading="lazy">
+        <img src="assets/shots/mine/05_defence.webp" alt="광산 방어전" loading="lazy">
+        <img src="assets/shots/mine/06_moon.webp" alt="로켓을 타고 달에서도 채굴" loading="lazy">
+        <img src="assets/shots/mine/07_island.webp" alt="바다 건너 도시로" loading="lazy">
+        <img src="assets/shots/mine/08_hell.webp" alt="용암 속 보스" loading="lazy">
+        <img src="assets/shots/mine/09_ant_colony.webp" alt="여왕개미 사냥" loading="lazy">
+        </div>
+      </div>
       <i class="walker px" aria-hidden="true"></i>
     </div>
   </div>
@@ -396,8 +422,9 @@ const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* 영상은 화면에 들어왔을 때만 재생 */
 (function () {
-  const v = document.querySelector('.phone video'); if (!v || still) { if (v) v.controls = true; return; }
-  new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: .25 }).observe(v);
+  const vs = document.querySelectorAll('.phone video'); if (still) { vs.forEach(v => v.controls = true); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: .25 });
+  vs.forEach(v => io.observe(v));
 })();
 </script>
 </body>
