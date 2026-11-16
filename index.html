@@ -2,659 +2,403 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>GuRis — 플레이하는 포트폴리오</title>
-<meta name="description" content="걸어 다니며 구경하는 인디 게임 개발자 포트폴리오">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GuRis — 구름 위 200층부터 지하 노역소까지</title>
+<meta name="description" content="GuRis는 혼자서 기획하고, 그리고, 만들어 출시하는 1인 게임 스튜디오입니다. 시바트럭, 지하노역소, 잘 자 바다야, 세계 최고의 빌딩 키우기.">
+<meta property="og:title" content="GuRis — 구름 위 200층부터 지하 노역소까지">
+<meta property="og:description" content="1인 게임 스튜디오 GuRis의 게임을 구경하고 받아 보세요.">
+<meta property="og:image" content="https://guris.kr/assets/shots/shiba.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <style>
-  :root{--ink:#14121f;--paper:#fff8ec;--accent:#ff5d73}
+  :root{
+    --space:#000103; --dusk:#16245e; --sunset:#f39a6b; --day:#83d5f7; --haze:#d7eaf3;
+    --night:#0c152d; --deep:#081838; --rock:#37232a; --bed:#0d0a0e;
+    --moon:#f6f0c8; --lamp:#ffc94a; --ink:#0c0f1f; --paper:#fffaf0;
+    --px:'Galmuri11','Galmuri9',monospace; --body:'Pretendard',system-ui,sans-serif;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden;background:#14121f;color:var(--paper);font-family:'Galmuri11','Galmuri9',system-ui,sans-serif}
-  canvas{display:block;width:100vw;height:100vh;image-rendering:pixelated;touch-action:none}
-  button{font:inherit;cursor:pointer}
-  .hud{position:fixed;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:5}
-  .hud>*{pointer-events:auto}
-  .chip{background:rgba(20,18,31,.78);border:2px solid var(--paper);padding:6px 10px;font-size:13px;box-shadow:3px 3px 0 #000}
-  .hud-r{display:flex;gap:8px}
-  .hud-r button{background:var(--paper);color:var(--ink);border:2px solid var(--ink);padding:6px 10px;font-size:13px;box-shadow:3px 3px 0 #000}
-  .hud-r button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
-  #toast{position:fixed;top:64px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity .5s;z-index:4;text-shadow:2px 2px 0 #000}
-  #toast.on{opacity:1}
-  #toast b{display:block;font-size:24px;letter-spacing:2px}
-  #toast span{font-size:13px;opacity:.85}
-  #intro{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(10,8,20,.55);z-index:8;text-align:center;padding:20px;cursor:pointer}
-  #intro h1{font-size:clamp(30px,7vw,64px);letter-spacing:3px;text-shadow:4px 4px 0 var(--accent),8px 8px 0 #000}
-  #intro p{font-size:15px;opacity:.9}
-  #intro .blink{animation:blink 1s steps(2) infinite;margin-top:10px;font-size:17px}
-  #intro .keys{font-size:12px;opacity:.75;line-height:1.9}
-  kbd{border:1px solid currentColor;padding:0 5px;margin:0 2px}
-  @keyframes blink{50%{opacity:0}}
-  .backdrop{position:fixed;inset:0;background:rgba(8,6,16,.7);display:flex;align-items:center;justify-content:center;z-index:10;padding:16px}
-  .backdrop[hidden]{display:none}
-  .card{background:var(--paper);color:var(--ink);border:3px solid var(--ink);box-shadow:8px 8px 0 #000;max-width:640px;width:100%;max-height:88vh;overflow:auto;position:relative;padding:22px}
-  .card .x{position:absolute;top:10px;right:10px;background:var(--ink);color:var(--paper);border:0;width:32px;height:32px;font-size:16px}
-  .media{aspect-ratio:16/9;border:3px solid var(--ink);margin-bottom:16px;background:#222;overflow:hidden}
-  .media video{width:100%;height:100%;object-fit:contain;background:#0d1530;display:block}
-  .media img,.media iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
-  .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(45deg,var(--c1),var(--c1) 14px,var(--c2) 14px,var(--c2) 28px);color:#fff;font-size:13px;text-shadow:1px 1px 0 #000}
-  .gallery{display:flex;gap:8px;overflow-x:auto;margin:-6px 0 16px;padding-bottom:6px}
-  .gallery img{height:220px;border:3px solid var(--ink);flex:none}
-  .tag{display:inline-block;background:var(--g,var(--accent));color:#fff;padding:3px 8px;font-size:12px;margin-bottom:8px}
-  .card h2{font-size:26px;margin-bottom:4px}
-  .sub{font-size:14px;opacity:.75;margin-bottom:14px}
-  .meta{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin-bottom:14px}
-  .meta li{border:2px solid var(--ink);padding:3px 8px;font-size:12px}
-  .meta b{margin-right:6px;opacity:.6;font-weight:normal}
-  .card p.desc{font-size:14px;line-height:1.8;margin-bottom:12px}
-  .feat{font-size:13px;line-height:1.8;padding-left:18px;margin-bottom:16px}
-  .links{display:flex;flex-wrap:wrap;gap:8px}
-  .links a,.links span{border:2px solid var(--ink);padding:7px 12px;font-size:13px;text-decoration:none;color:var(--paper);background:var(--ink);box-shadow:3px 3px 0 var(--g,var(--accent))}
-  .links span{background:transparent;color:var(--ink);opacity:.45;box-shadow:none}
-  #list .card{max-width:960px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:14px}
-  .gc{border:3px solid var(--ink);background:#fff;text-align:left;padding:0;color:var(--ink)}
-  .gc .media{border:0;border-bottom:3px solid var(--ink);margin:0}
-  .gc div.t{padding:10px 12px}
-  .gc h3{font-size:16px;margin:4px 0}
-  .gc small{font-size:12px;opacity:.7}
-  .touch{position:fixed;bottom:18px;left:0;right:0;display:none;justify-content:space-between;padding:0 18px;z-index:6;pointer-events:none}
-  .touch>div{display:flex;gap:12px;pointer-events:auto}
-  .touch button{width:64px;height:64px;border-radius:50%;background:rgba(255,248,236,.22);border:2px solid rgba(255,248,236,.75);color:#fff;font-size:20px;touch-action:none;-webkit-user-select:none;user-select:none}
-  .touch button.on{background:rgba(255,248,236,.5)}
-  @media (pointer:coarse){.touch{display:flex}}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);color:var(--paper);background:var(--space);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  img,video{display:block;max-width:100%;height:auto}
+  a{color:inherit}
+  .px{image-rendering:pixelated;image-rendering:crisp-edges}
+  :focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
+
+  /* ---------- 상단 ---------- */
+  .top{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:14px clamp(16px,4vw,40px);pointer-events:none}
+  .top>*{pointer-events:auto}
+  .brand{font-family:var(--px);font-size:20px;text-decoration:none;text-shadow:2px 2px 0 #000}
+  .top nav{display:flex;gap:6px;align-items:center}
+  .top nav a{font-size:14px;font-weight:600;text-decoration:none;padding:8px 12px;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+  .top nav a.get{font-family:var(--px);background:var(--lamp);color:var(--ink);text-shadow:none;box-shadow:3px 3px 0 #000}
+  .top nav a.get:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 #000}
+
+  /* ---------- 고도계 ---------- */
+  .gauge{position:fixed;right:clamp(10px,2.4vw,30px);top:50%;transform:translateY(-50%);z-index:25;height:min(62vh,520px);width:120px;font-family:var(--px)}
+  .gauge .rail{position:absolute;right:6px;top:0;bottom:0;width:4px;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.75) 0 4px,transparent 4px 10px)}
+  .gauge a{position:absolute;right:20px;transform:translateY(-50%);font-size:11px;text-decoration:none;white-space:nowrap;opacity:.6;text-shadow:1px 1px 0 #000}
+  .gauge a::after{content:"";position:absolute;right:-18px;top:50%;width:12px;height:4px;margin-top:-2px;background:#fff}
+  .gauge a[aria-current="true"]{opacity:1;color:var(--lamp)}
+  .gauge a[aria-current="true"]::after{background:var(--lamp)}
+  .car{position:absolute;right:-4px;transform:translateY(-50%);background:var(--lamp);color:var(--ink);font-size:13px;padding:5px 8px;box-shadow:3px 3px 0 #000;white-space:nowrap;min-width:92px;text-align:center}
+
+  /* ---------- 구역 공통 ---------- */
+  .zone{position:relative;min-height:100vh;padding:clamp(96px,14vh,150px) clamp(20px,6vw,90px) clamp(80px,12vh,130px);padding-right:clamp(20px,13vw,190px);display:flex;align-items:center;isolation:isolate}
+  .zone>.art{position:absolute;inset:0;z-index:-1;background-repeat:repeat-x;background-position:center bottom;background-size:auto 100%;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%)}
+  .zone>.shade{position:absolute;inset:0;z-index:-1}
+  .wrap{width:100%;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(28px,5vw,72px);align-items:center}
+  .copy h2,.hero h1,#get h2{word-spacing:-.22em}
+  .copy h2{font-family:var(--px);font-weight:700;font-size:clamp(30px,4.6vw,58px);line-height:1.25;letter-spacing:-.01em;text-shadow:4px 4px 0 rgba(0,0,0,.55);word-break:keep-all}
+  .copy .name{font-family:var(--px);font-size:clamp(15px,1.5vw,18px);display:flex;gap:10px;align-items:center;margin-bottom:18px}
+  .chip{font-size:12px;padding:3px 8px;background:var(--paper);color:var(--ink)}
+  .chip.live{background:#4be38a}
+  .copy p{font-size:clamp(16px,1.35vw,18px);max-width:34em;margin-top:20px;text-shadow:0 1px 6px rgba(0,0,0,.6);word-break:keep-all}
+  .copy ul{list-style:none;margin-top:18px;max-width:34em}
+  .copy li{font-size:15px;padding:8px 0 8px 22px;position:relative;border-top:1px solid rgba(255,255,255,.22);text-shadow:0 1px 6px rgba(0,0,0,.6);word-break:keep-all}
+  .copy li::before{content:"";position:absolute;left:2px;top:17px;width:8px;height:8px;background:var(--lamp)}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .btn{font-family:var(--px);font-size:15px;text-decoration:none;padding:13px 18px;background:var(--paper);color:var(--ink);box-shadow:4px 4px 0 #000;transition:transform .12s,box-shadow .12s}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #000}
+  .btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
+  .btn.hot{background:var(--lamp)}
+  .btn.ghost{background:transparent;color:var(--paper);box-shadow:inset 0 0 0 2px var(--paper)}
+  .soon{font-family:var(--px);font-size:14px;padding:13px 18px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+
+  /* 스크린샷 줄 */
+  .strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 16px;scrollbar-width:thin;scrollbar-color:var(--lamp) transparent}
+  .strip img{height:clamp(300px,52vh,470px);width:auto;flex:none;scroll-snap-align:start;box-shadow:6px 6px 0 rgba(0,0,0,.6)}
+  .media{min-width:0}
+  .frame{box-shadow:0 0 0 4px #000,10px 10px 0 4px rgba(0,0,0,.55);background:#000}
+  .frame img{width:100%}
+
+  /* ---------- 0. 우주 ---------- */
+  #top{background:linear-gradient(to bottom,var(--space) 0,var(--space) 62%,var(--dusk) 100%);padding-right:clamp(20px,6vw,90px);text-align:center;justify-content:center}
+  #stars{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+  .hero{max-width:900px}
+  .hero .logo{width:min(600px,84vw);margin:0 auto}
+  .hero h1{font-family:var(--px);font-weight:700;font-size:clamp(28px,5.2vw,62px);line-height:1.3;margin-top:clamp(28px,5vh,52px);word-break:keep-all}
+  .hero p{font-size:clamp(16px,1.6vw,20px);margin:18px auto 0;max-width:30em;opacity:.9;word-break:keep-all}
+  .hero .cta{justify-content:center}
+  .down{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-family:var(--px);font-size:13px;opacity:.75;animation:bob 1.6s steps(2) infinite}
+  @keyframes bob{50%{transform:translate(-50%,6px)}}
+
+  /* ---------- 1. 빌딩 ---------- */
+  #building{background:linear-gradient(to bottom,var(--dusk) 0,#5a3f86 30%,var(--sunset) 72%,var(--day) 100%)}
+  .phone{width:min(270px,62vw);aspect-ratio:886/1920;border:8px solid #0a0d1c;border-radius:34px;overflow:hidden;background:#0d1530;box-shadow:10px 12px 0 rgba(0,0,0,.45);flex:none}
+  .phone video{width:100%;height:100%;object-fit:cover}
+  .duo{display:flex;gap:18px;align-items:center}
+  .duo .strip{flex:1;min-width:0}
+  .cloud{position:absolute;z-index:-1;width:120px;height:20px;background:#fff;opacity:.45;box-shadow:20px -12px 0 #fff,52px -20px 0 #fff,84px -10px 0 #fff;animation:drift linear infinite}
+  @keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(120vw)}}
+
+  /* ---------- 2. 시바트럭 ---------- */
+  #shiba{background:linear-gradient(to bottom,var(--day) 0,var(--day) 20%,var(--haze) 80%,#4a4e63 100%);color:var(--ink)}
+  #shiba>.art{background-image:url(assets/bg_shiba.png);opacity:.6}
+  #shiba>.shade{background:linear-gradient(90deg,rgba(215,234,243,.85) 0,rgba(215,234,243,.5) 45%,transparent 75%)}
+  #shiba .copy h2{color:#fff;text-shadow:4px 4px 0 #1b2140}
+  #shiba .copy p,#shiba .copy li{text-shadow:none;font-weight:500}
+  #shiba .copy li{border-color:rgba(12,15,31,.25)}
+  #shiba .copy li::before{background:#e0782a}
+  .road{position:relative;height:70px;margin-top:-6px;background:#4a4e55;box-shadow:0 0 0 4px #000,10px 10px 0 4px rgba(0,0,0,.55);overflow:hidden}
+  .road::before{content:"";position:absolute;left:0;right:0;top:34px;height:6px;background:repeating-linear-gradient(90deg,#f2d200 0 40px,transparent 40px 80px);animation:lane .5s linear infinite}
+  @keyframes lane{to{transform:translateX(-80px)}}
+  .road::before{width:calc(100% + 80px)}
+  .road .truck{position:absolute;left:14%;bottom:8px;width:111px;animation:rumble .25s steps(2) infinite}
+  @keyframes rumble{50%{transform:translateY(-3px)}}
+
+  /* ---------- 3. 바다 ---------- */
+  #sea{background:linear-gradient(to bottom,#4a4e63 0,var(--night) 22%,var(--deep) 100%)}
+  #sea>.art{background-image:url(assets/bg_sea.png)}
+  #sea>.shade{background:linear-gradient(90deg,rgba(8,16,44,.82) 0,rgba(8,16,44,.35) 55%,transparent 100%)}
+  #sea .copy h2{color:var(--moon)}
+  .whale{position:absolute;z-index:-1;bottom:17%;left:0;width:218px;opacity:.9;animation:swim 46s linear infinite}
+  @keyframes swim{from{transform:translateX(-240px)}to{transform:translateX(105vw)}}
+
+  /* ---------- 4. 지하 ---------- */
+  #mine{background:linear-gradient(to bottom,var(--deep) 0,var(--rock) 20%,#141016 100%)}
+  #mine>.art{background-image:url(assets/bg_mine.png);opacity:.8}
+  #mine>.shade{background:radial-gradient(ellipse at 30% 50%,transparent 0,rgba(6,3,2,.72) 78%)}
+  #mine .copy h2{color:var(--lamp)}
+  .debt{font-family:var(--px);margin-top:22px;display:inline-block;background:#1a0808;box-shadow:0 0 0 3px #000;padding:10px 14px}
+  .debt span{display:block;font-size:12px;color:#ff9a9a}
+  .debt b{font-size:clamp(20px,2.4vw,28px);color:#ff3b3b;font-variant-numeric:tabular-nums}
+  .walker{position:absolute;right:26px;bottom:-4px;width:23px;height:25px;background:url(assets/game/ug_hero.png) 0 0/161px 25px;transform:scale(4);transform-origin:right bottom;animation:walk .8s steps(7) infinite}
+  @keyframes walk{to{background-position:-161px 0}}
+  .mineframe{position:relative}
+
+  /* ---------- 5. 바닥 ---------- */
+  #get{background:linear-gradient(to bottom,#141016 0,var(--bed) 30%,#000 100%);display:block;min-height:auto;padding-bottom:60px}
+  #get h2{font-family:var(--px);font-size:clamp(28px,4vw,48px);line-height:1.3;max-width:1180px;margin:0 auto 34px;word-break:keep-all}
+  .shelf{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+  .box{background:var(--paper);color:var(--ink);box-shadow:8px 8px 0 var(--lamp);display:grid;grid-template-columns:150px 1fr}
+  .box img{width:100%;height:100%;object-fit:cover}
+  .box div{padding:20px}
+  .box h3{font-family:var(--px);font-size:22px}
+  .box p{font-size:14px;margin:6px 0 16px}
+  .box .cta{margin-top:0;gap:10px}
+  .box .btn{font-size:13px;padding:10px 12px;background:var(--ink);color:var(--paper);box-shadow:3px 3px 0 var(--lamp)}
+  .contact{max-width:1180px;margin:72px auto 0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:40px;border-top:2px solid rgba(255,255,255,.25);padding-top:34px}
+  .contact h3{font-family:var(--px);font-size:22px;margin-bottom:10px}
+  .contact p{font-size:15px;opacity:.85;max-width:30em;word-break:keep-all}
+  .links{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
+  .links a{font-family:var(--px);font-size:14px;text-decoration:none;padding:10px 14px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+  .links a:hover{background:var(--paper);color:var(--ink)}
+  footer{max-width:1180px;margin:56px auto 0;font-size:13px;opacity:.55}
+
+  @media (max-width:900px){
+    .wrap,.contact{grid-template-columns:1fr}
+    .zone{padding-right:clamp(20px,6vw,90px)}
+    .gauge{top:60px;right:12px;transform:none;height:auto;width:auto}
+    .gauge .rail,.gauge a{display:none}
+    .car{position:static;transform:none;display:block;font-size:12px;min-width:0}
+    .top nav a:not(.get){display:none}
+    .shelf{grid-template-columns:1fr}
+    .box{grid-template-columns:110px 1fr}
+    .duo{flex-direction:column;align-items:flex-start}
+    .duo .strip{width:100%}
+    .phone{width:min(230px,60vw)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .cloud,.whale,.walker,.road::before,.road .truck,.down{animation:none}
+  }
 </style>
 </head>
 <body>
-<canvas id="c" aria-label="포트폴리오 게임 화면"></canvas>
 
-<div class="hud">
-  <div class="chip" id="hudL">★ 0/0</div>
-  <div class="hud-r">
-    <button id="btnSound" aria-label="소리 켜기/끄기">♪ ON</button>
-    <button id="btnList">목록으로 보기</button>
+<header class="top">
+  <a class="brand" href="#top">GuRis</a>
+  <nav>
+    <a href="#building">게임</a>
+    <a href="#contact">연락</a>
+    <a class="get" href="#get">게임 받기</a>
+  </nav>
+</header>
+
+<aside class="gauge" aria-label="현재 위치">
+  <div class="rail"></div>
+  <div class="car" id="car">고도 12,000m</div>
+</aside>
+
+<main>
+<section class="zone" id="top" data-g="space" data-label="우주">
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="hero">
+    <img class="logo px" src="assets/game/guris_logo.png" width="120" height="49" alt="GuRis">
+    <h1>구름 위 200층부터<br>지하 노역소까지</h1>
+    <p>GuRis는 혼자서 기획하고, 그리고, 만들어 출시하는 1인 게임 스튜디오입니다. 아래로 내려가며 네 개의 세계를 구경해 보세요.</p>
+    <div class="cta">
+      <a class="btn hot" href="#get">지금 받을 수 있는 게임</a>
+      <a class="btn ghost" href="#building">내려가며 구경하기</a>
+    </div>
   </div>
-</div>
-<div id="toast"><b></b><span></span></div>
+  <div class="down" aria-hidden="true">▼ 스크롤</div>
+</section>
 
-<div id="intro">
-  <h1 id="introTitle">GuRis</h1>
-  <p id="introSub">걸어 다니며 구경하는 포트폴리오</p>
-  <p class="blink">▶ 아무 키나 누르거나 화면을 터치하세요</p>
-  <p class="keys">출시작 2개 · 개발 중 2개<br><kbd>←</kbd><kbd>→</kbd> 이동 · <kbd>Space</kbd> 점프 · <kbd>E</kbd>/<kbd>↑</kbd> 살펴보기 · <kbd>L</kbd> 목록</p>
-</div>
+<section class="zone" id="building" data-g="floor" data-label="200층">
+  <i class="cloud" style="top:7%;animation-duration:70s"></i>
+  <i class="cloud" style="top:84%;animation-duration:95s;animation-delay:-40s;transform-origin:left;scale:.7"></i>
+  <div class="wrap">
+    <div class="copy">
+      <div class="name">세계 최고의 빌딩 키우기 <span class="chip">개발 중</span></div>
+      <h2>1층 빵집에서 구름 위 200층까지</h2>
+      <p>매장을 들이고, 매니저를 고용하고, 엘리베이터로 손님을 위층으로 실어 나르세요. 게임을 꺼 둔 사이에도 돈이 쌓이고 빌딩은 높아집니다.</p>
+      <ul>
+        <li>20층마다 열리는 새 구역, 오피스 타운부터 우주 항공까지</li>
+        <li>서울, 부산, 도쿄, 싱가포르, 뉴욕, 두바이 6개 도시</li>
+        <li>랭킹에서 다른 건물주의 빌딩을 실제 모습 그대로 구경</li>
+      </ul>
+      <div class="cta"><span class="soon">iOS · Android 출시 준비 중</span></div>
+    </div>
+    <div class="media duo">
+      <div class="phone"><video src="assets/shots/building/trailer.mp4" poster="assets/shots/building/poster.jpg" muted loop playsinline preload="none" aria-label="세계 최고의 빌딩 키우기 플레이 영상"></video></div>
+      <div class="strip" tabindex="0" aria-label="스크린샷">
+        <img src="assets/shots/building/phone_01.webp" alt="구름 위 200층까지" loading="lazy">
+        <img src="assets/shots/building/phone_04.webp" alt="서울에서 두바이까지" loading="lazy">
+        <img src="assets/shots/building/phone_05.webp" alt="밤이 되면 불이 켜지는 도시" loading="lazy">
+        <img src="assets/shots/building/phone_02.webp" alt="매니저가 알아서 척척" loading="lazy">
+        <img src="assets/shots/building/phone_03.webp" alt="20층마다 새 구역" loading="lazy">
+        <img src="assets/shots/building/phone_06.webp" alt="다른 건물주의 빌딩 구경" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="backdrop" id="modal" hidden><div class="card" role="dialog" aria-modal="true"><button class="x" aria-label="닫기">✕</button><div id="modalBody"></div></div></div>
-<div class="backdrop" id="list" hidden><div class="card"><button class="x" aria-label="닫기">✕</button><div id="listBody"></div></div></div>
+<section class="zone" id="shiba" data-g="ground" data-label="지상">
+  <div class="art px"></div><div class="shade"></div>
+  <div class="wrap">
+    <div class="copy">
+      <div class="name">시바트럭 <span class="chip live">출시</span></div>
+      <h2>달리고, 쏘고, 살아남아라</h2>
+      <p>강아지 특공대와 군용 지프를 타고 도로를 질주하며 적과 거대 괴수를 물리치는 액션 게임. 달릴 때마다 스킬을 모아 강해지고, 업그레이드와 장비는 다음 판에도 이어집니다.</p>
+      <ul>
+        <li>람보 퍼그, 오토바이 불독, 그리고 드론 부대</li>
+        <li>도심, 차이나타운, 교토, 아키하바라, 고대 아테네의 괴수 보스</li>
+        <li>노멀부터 헬까지 난이도 4단계, 전 세계 일일 랭킹</li>
+      </ul>
+      <div class="cta">
+        <a class="btn hot" href="https://apps.apple.com/us/app/shiba-truck/id6787904572" target="_blank" rel="noopener">App Store에서 받기</a>
+        <a class="btn" href="https://play.google.com/store/apps/details?id=com.guris.humvdogslegend2" target="_blank" rel="noopener">Google Play에서 받기</a>
+      </div>
+    </div>
+    <div class="media">
+      <div class="frame"><img class="px" src="assets/shots/shiba.png" width="390" height="220" alt="시바트럭 타이틀 화면: 불을 뿜는 괴수와 로고"></div>
+      <div class="road" aria-hidden="true"><img class="truck px" src="assets/game/hd_car.png" width="37" height="29" alt=""></div>
+    </div>
+  </div>
+</section>
 
-<div class="touch" id="touch">
-  <div><button data-k="l" aria-label="왼쪽">◀</button><button data-k="r" aria-label="오른쪽">▶</button></div>
-  <div><button data-k="act" aria-label="살펴보기">E</button><button data-k="jump" aria-label="점프">▲</button></div>
-</div>
+<section class="zone" id="sea" data-g="depth" data-label="해수면">
+  <div class="art px"></div><div class="shade"></div>
+  <img class="whale px" src="assets/game/ww_whale.png" width="109" height="22" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="copy">
+      <div class="name">잘 자, 바다야 <span class="chip">개발 중</span></div>
+      <h2>뗏목 하나로 부산에서 세계의 바다까지</h2>
+      <p>시간에 쫓기지 않는 픽셀 아트 항해 게임. 날씨와 시간대에 따라 달라지는 바다에서 낚시하고, 잠수하고, 뗏목 위의 작은 집을 꾸밉니다.</p>
+      <ul>
+        <li>물고기 37종, 비와 폭풍과 밤바다에만 나오는 희귀 어종</li>
+        <li>도쿄, 시드니, 카이로, 남극까지 실제 항구 26곳</li>
+        <li>50벌 넘는 의상, 고양이·강아지·수달·돌고래 펫</li>
+      </ul>
+      <div class="cta">
+        <a class="btn hot" href="https://apps.apple.com/us/app/water-world-story/id6781494299" target="_blank" rel="noopener">App Store 페이지</a>
+        <a class="btn" href="https://play.google.com/store/apps/details?id=com.guris.waterworld" target="_blank" rel="noopener">Google Play 페이지</a>
+        <a class="btn ghost" href="https://youtube.com/shorts/wFxT0XRtjVQ" target="_blank" rel="noopener">숏츠로 보기</a>
+      </div>
+    </div>
+    <div class="media">
+      <div class="strip" tabindex="0" aria-label="스크린샷">
+        <img src="assets/shots/sea/01_hero_sunset.webp" alt="잘 자, 바다야: 나만의 작은 뗏목" loading="lazy">
+        <img src="assets/shots/sea/10_night.webp" alt="밤바다에 등불이 켜지면" loading="lazy">
+        <img src="assets/shots/sea/02_fishing.webp" alt="낚시" loading="lazy">
+        <img src="assets/shots/sea/03_dive.webp" alt="잠수" loading="lazy">
+        <img src="assets/shots/sea/09_storm.webp" alt="폭풍" loading="lazy">
+        <img src="assets/shots/sea/05_worldmap.webp" alt="세계지도" loading="lazy">
+        <img src="assets/shots/sea/08_decor.webp" alt="뗏목 꾸미기" loading="lazy">
+        <img src="assets/shots/sea/07_wardrobe.webp" alt="옷장" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="zone" id="mine" data-g="base" data-label="지하">
+  <div class="art px"></div><div class="shade"></div>
+  <div class="wrap">
+    <div class="copy">
+      <div class="name">지하노역소 <span class="chip live">출시</span></div>
+      <h2>빚을 갚고 지하에서 탈출하라</h2>
+      <p>큰 빚을 지고 지하 노역소에 끌려온 청년의 이야기. 일해서 빚을 갚는 방치형 게임에 스토리를 얹었습니다. 숨겨진 단서를 모으고 노역소 사람들과 대화하며 탈출로를 찾으세요.</p>
+      <ul>
+        <li>여러 개의 엔딩과 숨겨진 이스터에그</li>
+        <li>옛날 오락실 느낌의 미니게임</li>
+      </ul>
+      <div class="debt"><span>남은 빚</span><b id="debt">₩999,999,999</b></div>
+      <div class="cta">
+        <a class="btn hot" href="https://apps.apple.com/kr/app/id1546968607" target="_blank" rel="noopener">App Store에서 받기</a>
+        <a class="btn" href="https://onelink.to/s9wnc5" target="_blank" rel="noopener">Android에서 받기</a>
+      </div>
+    </div>
+    <div class="media mineframe">
+      <div class="frame"><img class="px" src="assets/shots/underground.png" width="568" height="320" alt="지하노역소: 레일이 깔린 갱도"></div>
+      <i class="walker px" aria-hidden="true"></i>
+    </div>
+  </div>
+</section>
+
+<section class="zone" id="get" data-g="floorend" data-label="바닥">
+  <h2>여기가 바닥입니다.<br>이제 직접 해 볼 차례예요.</h2>
+  <div class="shelf">
+    <div class="box">
+      <img class="px" src="assets/shots/shiba.png" alt="">
+      <div>
+        <h3>시바트럭</h3>
+        <p>차량 전투 액션 · 무료</p>
+        <div class="cta">
+          <a class="btn" href="https://apps.apple.com/us/app/shiba-truck/id6787904572" target="_blank" rel="noopener">App Store</a>
+          <a class="btn" href="https://play.google.com/store/apps/details?id=com.guris.humvdogslegend2" target="_blank" rel="noopener">Google Play</a>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <img class="px" src="assets/shots/underground.png" alt="">
+      <div>
+        <h3>지하노역소</h3>
+        <p>방치형 스토리 게임 · 무료</p>
+        <div class="cta">
+          <a class="btn" href="https://apps.apple.com/kr/app/id1546968607" target="_blank" rel="noopener">App Store</a>
+          <a class="btn" href="https://onelink.to/s9wnc5" target="_blank" rel="noopener">Android</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact" id="contact">
+    <div>
+      <h3>GuRis에 연락하기</h3>
+      <p>협업, 퍼블리싱, 취재 문의와 게임 피드백 모두 환영합니다.</p>
+    </div>
+    <div class="links">
+      <a href="mailto:guristest@gmail.com">이메일</a>
+      <a href="https://www.youtube.com/channel/UC-lySgqNnfwWANtLAmbYjRA" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://x.com/guris_studio" target="_blank" rel="noopener">X</a>
+      <a href="https://www.instagram.com/guris_game" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.threads.net/@guris_game" target="_blank" rel="noopener">Threads</a>
+      <a href="https://cafe.naver.com/gurisgame" target="_blank" rel="noopener">네이버 카페</a>
+      <a href="https://linktr.ee/GurisGame" target="_blank" rel="noopener">Linktree</a>
+    </div>
+  </div>
+  <footer>© GuRis</footer>
+</section>
+</main>
 
 <script>
-/* =====================================================================
-   1) 내용 수정은 여기서 — 텍스트, 링크, 스크린샷 경로
-   ===================================================================== */
-const CONFIG = {
-  studio: "GuRis",
-  tagline: "걸어 다니며 구경하는 포트폴리오",
-  about: {
-    name: "GuRis",
-    role: "1인 인디 게임 개발사",
-    bio: "혼자서 기획·개발·출시까지 하는 1인 게임 개발사입니다. 방치형 스토리 게임부터 차량 전투 액션까지, 실험적인 모바일 게임을 만들고 있어요.",
-    photo: ""   // 예: "assets/shots/me.png"
-  },
-  contact: [
-    { label: "이메일", url: "mailto:guristest@gmail.com" },
-    { label: "Linktree", url: "https://linktr.ee/GurisGame" },
-    { label: "네이버 카페", url: "https://cafe.naver.com/gurisgame" }
-  ],
-  // order = 맵에 나오는 순서. image: 스크린샷 경로, youtube: 영상 ID만
-  games: {
-    underground: {
-      title: "지하노역소",
-      genre: "모바일 · 방치형 시뮬레이션",
-      tagline: "빚을 갚고 지하에서 탈출하라",
-      engine: "", platform: "iOS · Android", status: "출시",
-      description: "큰 빚을 지고 지하 노역소에 끌려온 청년이 일해서 빚을 갚고 자유를 되찾는 이야기. 방치형 게임에 스토리를 얹어, 숨겨진 단서와 장비를 모으고 노역소 사람들과 대화하며 탈출로를 찾아간다.",
-      features: ["스토리와 여러 엔딩, 숨겨진 이스터에그", "옛날 오락실 느낌의 다양한 미니게임", "클라우드 저장 지원"],
-      image: "assets/shots/underground.png", youtube: "",
-      links: [
-        { label: "App Store", url: "https://apps.apple.com/kr/app/id1546968607" },
-        { label: "다운로드 (iOS · Android)", url: "https://onelink.to/s9wnc5" },
-        { label: "소개 페이지", url: "https://underground-station.webflow.io/" }
-      ],
-      color: "#b5651d"
-    },
-    shiba: {
-      title: "시바트럭",
-      genre: "모바일 · 차량 전투 액션",
-      tagline: "달리고, 쏘고, 살아남아라. 멍멍 특공대",
-      engine: "", platform: "iOS · Android", status: "출시",
-      description: "강아지 특공대와 함께 군용 지프를 타고 도로를 질주하며 적과 거대 괴수를 물리치는 액션 게임. 달릴 때마다 스킬을 모아 강해지고, 영구 업그레이드와 장비, 새 차량은 다음 판에도 이어진다.",
-      features: ["람보 퍼그, 오토바이 불독 등 강아지 특공대와 드론 부대", "도심, 차이나타운, 교토, 아키하바라, 고대 아테네까지 세계 각지의 괴수 보스", "노멀부터 헬까지 난이도 4단계, 전 세계 일일 랭킹"],
-      image: "assets/shots/shiba.png", youtube: "",
-      links: [
-        { label: "App Store", url: "https://apps.apple.com/us/app/shiba-truck/id6787904572" },
-        { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.guris.humvdogslegend2" }
-      ],
-      color: "#e0782a"
-    },
-    building: {
-      title: "세계 최고의 빌딩 키우기",
-      genre: "모바일 · 방치형 타워",
-      tagline: "200층 마천루를 세우는 방치형 건물주 게임",
-      platform: "iOS · Android", status: "개발 중",
-      description: "1층 작은 빵집에서 시작해 구름 위 200층까지. 매장을 들이고 매니저를 고용하고 엘리베이터로 손님을 위층으로 실어 나르면, 게임을 꺼 둔 사이에도 돈이 쌓이며 빌딩이 높아진다.",
-      features: ["20층마다 열리는 새 구역: 오피스, 호텔, 방송, 테크, 스카이 다이닝, 우주 항공", "서울에서 부산, 도쿄, 싱가포르, 뉴욕, 두바이까지 6개 도시", "밤이면 창마다 불이 켜지고 비·눈·안개가 바뀌는 빌딩의 하루", "랭킹에서 다른 건물주의 빌딩을 실제 모습 그대로 구경"],
-      image: "", youtube: "",
-      video: "assets/shots/building/trailer.mp4", poster: "assets/shots/building/poster.jpg",
-      gallery: [1, 2, 3, 4, 5, 6, 7].map(n => `assets/shots/building/phone_0${n}.webp`),
-      links: [{ label: "출시 알림", url: "" }],
-      color: "#3c7dd9"
-    },
-    sea: {
-      title: "잘 자, 바다야",
-      genre: "모바일 · 힐링 항해 어드벤처",
-      tagline: "뗏목 하나로 부산에서 세계의 바다까지",
-      engine: "GameMaker", platform: "iOS · Android", status: "개발 중",
-      description: "작은 뗏목을 타고 부산에서 출발해 세계 곳곳의 항구로 떠나는 픽셀 아트 항해 게임. 시간에 쫓기지 않고, 날씨와 시간대에 따라 달라지는 바다에서 낚시하고 요리하며 뗏목 위의 집을 꾸민다.",
-      features: ["물고기 37종, 비·폭풍·밤바다에만 나오는 희귀 어종", "도쿄, 시드니, 카이로, 남극까지 실제 항구 26곳", "뗏목 꾸미기, 50벌 넘는 의상, 고양이·강아지·수달·돌고래 펫", "바다 괴수와 대포 대결, 미니게임 15종, 친구 뗏목 방문"],
-      image: "", youtube: "wFxT0XRtjVQ",
-      gallery: ["01_hero_sunset", "02_fishing", "03_dive", "05_worldmap", "07_wardrobe", "08_decor", "09_storm", "10_night"].map(n => `assets/shots/sea/${n}.webp`),
-      links: [
-        { label: "홍보 숏츠", url: "https://youtube.com/shorts/wFxT0XRtjVQ" },
-        { label: "App Store", url: "https://apps.apple.com/us/app/water-world-story/id6781494299" },
-        { label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.guris.waterworld" }
-      ],
-      color: "#2c5aa0"
-    }
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* 별: 낮은 해상도로 그려 픽셀 느낌 유지 */
+(function () {
+  const c = document.getElementById('stars'), x = c.getContext('2d');
+  let stars = [];
+  function size() {
+    c.width = Math.ceil(c.clientWidth / 4); c.height = Math.ceil(c.clientHeight / 4);
+    stars = Array.from({ length: Math.round(c.width * c.height / 260) }, () => ({ x: Math.random() * c.width | 0, y: Math.random() * c.height * .8 | 0, p: Math.random() * 6.28, s: .5 + Math.random() * 1.5 }));
+    draw(0);
   }
-};
-
-/* =====================================================================
-   2) 아트 슬롯 — assets/ 폴더에 같은 이름의 PNG를 넣으면 자동 교체
-      (규격은 CODEX_ART_BRIEF.md 참고. 파일이 없으면 임시 도형으로 표시)
-   ===================================================================== */
-const ART = {
-  player:        { src: "assets/player.png", fw: 32, fh: 32, frames: 8 }, // 0-1 대기, 2-5 걷기, 6 점프, 7 낙하
-  coin:          { src: "assets/coin.png",   fw: 12, fh: 12, frames: 4 },
-  bg_lobby:      { src: "assets/bg_lobby.png" },    // 480x270, 가로 반복
-  bg_mine:       { src: "assets/bg_mine.png" },
-  bg_shiba:      { src: "assets/bg_shiba.png" },
-  bg_building:   { src: "assets/bg_building.png" },
-  bg_sea:        { src: "assets/bg_sea.png" },
-  bg_end:        { src: "assets/bg_end.png" },
-  tile_lobby:    { src: "assets/tile_lobby.png" },  // 32x16: 왼쪽 16 = 윗면, 오른쪽 16 = 속
-  tile_mine:     { src: "assets/tile_mine.png" },
-  tile_shiba:    { src: "assets/tile_shiba.png" },
-  tile_building: { src: "assets/tile_building.png" },
-  tile_sea:      { src: "assets/tile_sea.png" },
-  tile_end:      { src: "assets/tile_end.png" },
-  about_board:   { src: "assets/about_board.png",  w: 72, h: 72 },
-  arcade:        { src: "assets/arcade.png",       w: 32, h: 56 },
-  sign:          { src: "assets/sign.png",         w: 48, h: 40 },
-  mine_office:   { src: "assets/mine_office.png",  w: 96, h: 80 },
-  lantern:       { src: "assets/lantern.png",      w: 12, h: 20 },
-  minecart:      { src: "assets/minecart.png",     w: 56, h: 16 },
-  debt_board:    { src: "assets/debt_board.png",   w: 72, h: 40 },
-  jeep:          { src: "assets/jeep.png",         w: 96, h: 56 },
-  cone:          { src: "assets/cone.png",         w: 12, h: 16 },
-  building_site: { src: "assets/building_site.png",w: 96, h: 80 },
-  crane:         { src: "assets/crane.png",        w: 64, h: 128 },
-  sea_house:     { src: "assets/sea_house.png",    w: 96, h: 80 },
-  raft:          { src: "assets/raft.png",         w: 56, h: 12 },
-  sofa:          { src: "assets/sofa.png",         w: 40, h: 24 },
-  mailbox:       { src: "assets/mailbox.png",      w: 32, h: 48 },
-  flag:          { src: "assets/flag.png",         w: 32, h: 64 },
-  portal:        { src: "assets/portal.png",       w: 48, h: 64 },
-  // ---- 각 게임 저장소에서 가져온 원본 스프라이트 (assets/game/) ----
-  ww_boat: { src: "assets/game/ww_boat.png", w: 119, h: 32 },
-  ww_girl: { src: "assets/game/ww_girl.png", w: 25, h: 34 },
-  ww_girl_walk: { src: "assets/game/ww_girl_walk.png", fw: 16, fh: 35, frames: 4 },
-  ww_whale: { src: "assets/game/ww_whale.png", w: 109, h: 22 },
-  guris_logo: { src: "assets/game/guris_logo.png", w: 120, h: 49 },
-  ug_gate: { src: "assets/game/ug_gate.png", w: 81, h: 81 },
-  ug_hero: { src: "assets/game/ug_hero.png", fw: 23, fh: 25, frames: 7 },
-  ug_cart: { src: "assets/game/ug_cart.png", w: 23, h: 30 },
-  ug_npc: { src: "assets/game/ug_npc.png", w: 20, h: 35 },
-  ug_light: { src: "assets/game/ug_light.png", w: 6, h: 18 },
-  hd_logo: { src: "assets/game/hd_logo.png", w: 160, h: 41 },
-  hd_car: { src: "assets/game/hd_car.png", w: 74, h: 58 },
-  hd_bulldog: { src: "assets/game/hd_bulldog.png", w: 48, h: 27 },
-  hd_dog: { src: "assets/game/hd_dog.png", w: 40, h: 46 },
-};
-const IMG = {};
-// PNG가 없으면 같은 이름의 SVG를 시도 (SVG는 width/height 속성 필수)
-for (const k in ART) {
-  const im = new Image(); im.onload = () => IMG[k] = im;
-  im.onerror = () => { if (!im.dataset.svg) { im.dataset.svg = 1; im.src = ART[k].src.replace(/\.png$/, '.svg'); } };
-  im.src = ART[k].src;
-}
-
-/* =====================================================================
-   3) 엔진
-   ===================================================================== */
-const cv = document.getElementById('c'), ctx = cv.getContext('2d');
-let S = 1, VW = 480, VH = 270, OY = 0;
-function resize() {
-  const dpr = Math.min(devicePixelRatio || 1, 2);
-  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
-  S = Math.min(cv.height / 270, cv.width / (cv.width < cv.height ? 220 : 300));
-  VW = cv.width / S; VH = cv.height / S; OY = VH - 270;
-}
-addEventListener('resize', resize); resize();
-
-const GROUND = 220, WORLD = 2420;
-const G = CONFIG.games;
-const ZONES = [
-  { id: 'lobby',    x0: 0,    x1: 320,  name: "로비",            sub: CONFIG.studio },
-  { id: 'mine',     x0: 320,  x1: 740, name: "출시작 01",       sub: G.underground.title },
-  { id: 'shiba',    x0: 740,  x1: 1160, name: "출시작 02",       sub: G.shiba.title },
-  { id: 'building', x0: 1160, x1: 1680, name: "개발 중 01",      sub: G.building.title },
-  { id: 'sea',      x0: 1680, x1: 2120, name: "개발 중 02",      sub: G.sea.title },
-  { id: 'end',      x0: 2120, x1: WORLD, name: "출구",           sub: "연락처 · 처음으로" }
-];
-const PAL = {
-  lobby:    { sky: ['#2c2058', '#f3a2b4'], top: '#9b7fd9', fill: '#3d2e6e' },
-  mine:     { sky: ['#0d0807', '#2b1d15'], top: '#7a5638', fill: '#3a271b' },
-  shiba:    { sky: ['#72c3f3', '#e6f6ff'], top: '#8d939c', fill: '#4a4e55' },
-  building: { sky: ['#ff9468', '#ffe2b3'], top: '#cfc7b8', fill: '#8a8378' },
-  sea:      { sky: ['#08113a', '#2a3f7c'], top: '#c98d52', fill: '#7a4a2a' },
-  end:      { sky: ['#3a2a6a', '#ffcf9e'], top: '#7fbf7a', fill: '#4b7a48' }
-};
-
-// --- 지형: 바닥은 끝까지 이어짐, 점프는 선택 ---
-const solids = [
-  { x: 0, y: 220, w: WORLD, h: 80 },
-  { x: 520, y: 190, w: 23, h: 30, obj: true },           // 지하노역소 광차
-  { x: 1320, y: 172, w: 80, h: 48 },           // 빌딩 옥상 1
-  { x: 1420, y: 148, w: 60, h: 72 },
-  { x: 1500, y: 172, w: 100, h: 48 },          // 빌딩 옥상 2 (공사 현장)
-  { x: 1840, y: 198, w: 119, h: 22, obj: true } // 잘자 바다야 뗏목
-];
-for (let i = 0; i < 5; i++) solids.push({ x: 1240 + 16 * i, y: 212 - 8 * i, w: 16, h: 8 + 8 * i });
-for (let i = 0; i < 5; i++) solids.push({ x: 1600 + 16 * i, y: 180 + 8 * i, w: 16, h: 40 - 8 * i });
-const GAPS = [];
-
-// --- 살펴볼 수 있는 곳 ---
-const spots = [
-  { x: 150,  w: 72,  y: 148, h: 72, kind: 'about', label: 'ABOUT' },
-  { x: 630,  w: 81,  y: 139, h: 81, kind: 'game', id: 'underground', label: '광산 입구' },
-  { x: 960,  w: 74,  y: 162, h: 58, kind: 'game', id: 'shiba',       label: '트럭 타기' },
-  { x: 1500, w: 96,  y: 92,  h: 80, kind: 'game', id: 'building',    label: '공사 현장' },
-  { x: 1840, w: 120, y: 150, h: 70, kind: 'game', id: 'sea',         label: '말 걸기' },
-  { x: 2220, w: 32,  y: 172, h: 48, kind: 'contact', label: '연락하기' },
-  { x: 2360, w: 48,  y: 156, h: 64, kind: 'restart', label: '처음으로' }
-];
-const coins = [[290,200],[531,176],[830,200],[1360,150],[1450,124],[1880,180],[2060,200],[2180,200]]
-  .map(([x, y]) => ({ x, y, got: false }));
-
-// --- 플레이어 ---
-const P = { x: 70, y: GROUND - 26, w: 14, h: 26, vx: 0, vy: 0, on: false, face: 1, t: 0, safeX: 70, coy: 0, buf: 0 };
-const SPEED = 2.6, JUMP = 8.4, GRAV = 0.45;
-const keys = {}, touch = { l: false, r: false };
-let camX = 0, started = false, paused = false, time = 0, zoneNow = null, near = null;
-const parts = [];
-const ov = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-
-// --- 사운드 (아주 작은 효과음) ---
-let ac = null, soundOn = true;
-function beep(f, d = .08, type = 'square', v = .05) {
-  if (!soundOn) return;
-  try {
-    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = type; o.frequency.value = f; g.gain.value = v;
-    g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + d);
-    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + d);
-  } catch (e) {}
-}
-
-function puff(x, y, n, c, spd = 1.5, g = .05) {
-  for (let i = 0; i < n; i++) parts.push({ x, y, vx: (Math.random() - .5) * spd * 2, vy: -Math.random() * spd, life: 30 + Math.random() * 20, c, g });
-}
-
-function update() {
-  time++;
-  if (paused) return;
-  const dir = started ? ((keys.ArrowRight || keys.KeyD || touch.r ? 1 : 0) - (keys.ArrowLeft || keys.KeyA || touch.l ? 1 : 0)) : 0;
-  P.vx += (dir * SPEED - P.vx) * .35;
-  if (dir) P.face = dir;
-  P.coy = P.on ? 6 : P.coy - 1;
-  if (P.buf > 0) {
-    if (P.coy > 0) { P.vy = -JUMP; P.on = false; P.coy = 0; P.buf = 0; beep(520, .1); puff(P.x + 7, P.y + P.h, 5, '#fff8'); }
-    else P.buf--;
+  function draw(t) {
+    x.clearRect(0, 0, c.width, c.height);
+    for (const s of stars) { const a = .35 + .65 * Math.abs(Math.sin(s.p + t * .001 * s.s)); x.fillStyle = `rgba(190,215,255,${a * (1 - s.y / c.height)})`; x.fillRect(s.x, s.y, 1, 1); }
   }
-  const held = keys.Space || keys.KeyZ || keys.KeyW || keys.ArrowUp || touch.jump;
-  if (P.vy < 0 && !held) P.vy += GRAV;
-  P.vy = Math.min(P.vy + GRAV, 9);
+  c.style.imageRendering = 'pixelated';
+  addEventListener('resize', size); size();
+  if (!still) (function loop(t) { if (scrollY < innerHeight) draw(t); requestAnimationFrame(loop); })(0);
+})();
 
-  // X 이동 (낮은 턱은 자동으로 올라감)
-  P.x += P.vx;
-  for (const s of solids) if (ov(P, s)) {
-    const feet = P.y + P.h;
-    if (P.on && s.y >= feet - 9 && s.y < feet) { P.y = s.y - P.h; continue; }
-    if (P.vx > 0) P.x = s.x - P.w; else if (P.vx < 0) P.x = s.x + s.w;
+/* 고도계: 스크롤 위치를 층·수심·지하 깊이로 보여 주고, 눈금은 구역 이동 링크 */
+(function () {
+  const zones = [...document.querySelectorAll('[data-g]')], gauge = document.querySelector('.gauge'), car = document.getElementById('car'), debt = document.getElementById('debt');
+  const ticks = zones.map((z, i) => { const a = document.createElement('a'); a.href = '#' + z.id; a.textContent = z.dataset.label; a.style.top = (i / (zones.length - 1) * 100) + '%'; gauge.insertBefore(a, car); return a; });
+  const lerp = (a, b, p) => Math.round(a + (b - a) * p), n = v => v.toLocaleString('ko-KR');
+  const read = { space: p => '고도 ' + n(lerp(12000, 900, p)) + 'm', floor: p => lerp(200, 1, p) + '층', ground: () => '지상 0m', depth: p => '수심 ' + lerp(0, 40, p) + 'm', base: p => '지하 ' + lerp(1, 99, p) + '층', floorend: () => '바닥' };
+  const wide = matchMedia('(min-width: 901px)');
+  function update() {
+    const mid = scrollY + innerHeight / 2; let i = 0;
+    zones.forEach((z, k) => { if (z.offsetTop <= mid) i = k; });
+    const z = zones[i], p = Math.min(1, Math.max(0, (mid - z.offsetTop) / z.offsetHeight));
+    car.textContent = read[z.dataset.g](p);
+    ticks.forEach((a, k) => a.setAttribute('aria-current', k === i));
+    car.style.top = wide.matches ? ((i + p) / (zones.length - 1) * 100).toFixed(2) + '%' : '';
+    if (z.id === 'mine') debt.textContent = '₩' + n(lerp(999999999, 0, p));
   }
-  P.x = Math.max(0, Math.min(WORLD - P.w, P.x));
-  // Y 이동
-  const wasOn = P.on, vyPrev = P.vy;
-  P.y += P.vy; P.on = false;
-  for (const s of solids) if (ov(P, s)) {
-    if (P.vy > 0) { P.y = s.y - P.h; P.vy = 0; P.on = true; }
-    else if (P.vy < 0) { P.y = s.y + s.h; P.vy = 0; }
-  }
-  if (P.on && !wasOn && vyPrev > 4) puff(P.x + 7, P.y + P.h, 6, '#fff8');
-  if (P.on && Math.abs(P.vx) < .5 || P.on && time % 20 === 0) P.safeX = P.x;
-  if (P.on) {
-    const ahead = { x: P.x - 20, y: P.y + P.h, w: P.w + 40, h: 4 };
-    if (solids.filter(s => ov(ahead, s)).length && !isNearGap(P.x)) P.safeX = P.x;
-  }
-  if (P.y > 300) { // 물에 빠짐
-    puff(P.x + 7, 230, 18, zoneNow && zoneNow.id === 'sea' ? '#bfefff' : '#8a6a4a', 2.5, .12); beep(180, .25, 'sawtooth', .04);
-    P.x = P.safeX; P.y = GROUND - 60; P.vy = 0; P.vx = 0;
-  }
-  P.t += P.on ? Math.abs(P.vx) * .12 : 0;
+  addEventListener('scroll', update, { passive: true }); addEventListener('resize', update); update();
+})();
 
-  for (const c of coins) if (!c.got && Math.abs(P.x + 7 - c.x) < 12 && Math.abs(P.y + 13 - c.y) < 18) {
-    c.got = true; puff(c.x, c.y, 10, '#ffd84a', 2); beep(880, .07); setTimeout(() => beep(1320, .1), 70); hud();
-    if (coins.every(c => c.got)) toast("★ 전부 모았어요!", "끝까지 구경해 줘서 고마워요");
-  }
-  near = spots.find(s => P.x + P.w > s.x - 4 && P.x < s.x + s.w + 4 && P.y + P.h > s.y && P.y < s.y + s.h + 4) || null;
-
-  const z = ZONES.find(z => P.x + 7 >= z.x0 && P.x + 7 < z.x1);
-  if (z !== zoneNow) { if (zoneNow && started) toast(z.name, z.sub); zoneNow = z; }
-
-  const target = P.x + 7 - VW * .4;
-  camX += (target - camX) * .1;
-  camX = Math.max(0, Math.min(Math.max(0, WORLD - VW), camX));
-
-  for (let i = parts.length - 1; i >= 0; i--) { const p = parts[i]; p.x += p.vx; p.y += p.vy; p.vy += p.g; if (--p.life <= 0) parts.splice(i, 1); }
-}
-function isNearGap(x) { return GAPS.some(([a, b]) => x > a - 30 && x < b + 30); }
-
-/* =====================================================================
-   4) 그리기 — 이미지가 있으면 이미지, 없으면 임시 도형
-   ===================================================================== */
-const R = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
-function txt(s, x, y, size, c, align = 'center') {
-  ctx.font = `${size}px Galmuri11, Galmuri9, sans-serif`; ctx.textAlign = align; ctx.textBaseline = 'middle';
-  ctx.fillStyle = c; ctx.fillText(s, x, y);
-}
-function rng(seed) { return () => (seed = (seed * 16807) % 2147483647) / 2147483647; }
-
-// 소품: x = 왼쪽, yb = 바닥 기준
-function prop(key, x, yb, ph) {
-  const a = ART[key], im = IMG[key];
-  if (im) ctx.drawImage(im, Math.round(x), Math.round(yb - a.h), a.w, a.h);
-  else ph(x, yb - a.h, a.w, a.h);
-}
-
-const PH = { // ---- 임시 도형 (Codex 아트가 들어오면 안 쓰임) ----
-  about_board(x, y, w, h) { R(x + 8, y + 50, 6, 22, '#5a3d24'); R(x + w - 14, y + 50, 6, 22, '#5a3d24'); R(x, y, w, 54, '#7a5232'); R(x + 4, y + 4, w - 8, 46, '#f1e3c4'); R(x + 10, y + 10, 18, 22, '#c9b9e8'); txt('ABOUT', x + 50, y + 16, 8, '#3d2e6e'); txt('GuRis', x + 50, y + 28, 7, '#3d2e6e'); R(x + 10, y + 38, 52, 2, '#bba'); R(x + 10, y + 43, 40, 2, '#bba'); },
-  arcade(x, y, w, h) { R(x, y, w, h, '#2b1f55'); R(x + 3, y + 3, w - 6, 8, '#ff5d73'); R(x + 4, y + 14, w - 8, 18, time % 40 < 20 ? '#5ef2d0' : '#47c9f2'); R(x + 2, y + 34, w - 4, 6, '#40357a'); R(x + 8, y + 35, 3, 3, '#ffd84a'); R(x + 18, y + 35, 4, 4, '#ff5d73'); },
-  sign(x, y, w, h) { R(x + w / 2 - 2, y + 18, 4, 22, '#5a3d24'); R(x, y, w, 20, '#8a5a32'); R(x + 2, y + 2, w - 4, 16, '#e9c48a'); },
-  mine_office(x, y, w, h) { R(x, y + 14, w, h - 14, '#5e4a3a'); for (let i = 0; i < 6; i++) R(x, y + 20 + i * 10, w, 1, '#4a3a2d'); R(x - 4, y + 6, w + 8, 10, '#3a3a3f'); R(x + 8, y + 24, 30, 14, '#ffcf6b'); R(x + 54, y + 34, 28, h - 34, '#2a2220'); R(x + 10, y, w - 20, 10, '#c0392b'); txt('노역소 사무실', x + w / 2, y + 5, 6, '#fff'); },
-  lantern(x, y, w, h) { R(x + 5, y - 30, 1, 30, '#222'); R(x + 1, y, w - 2, 3, '#333'); R(x + 2, y + 3, w - 4, 12, time % 50 < 47 ? '#ffc94a' : '#a07a20'); R(x + 1, y + 15, w - 2, 3, '#333'); },
-  minecart(x, y, w, h) { R(x + 2, y, w - 4, h - 4, '#6d6f78'); R(x + 4, y + 2, w - 8, 3, '#8a8c95'); R(x + 8, y + h - 5, 6, 5, '#222'); R(x + w - 14, y + h - 5, 6, 5, '#222'); R(x + 10, y - 3, 30, 4, '#c9a14a'); },
-  debt_board(x, y, w, h) { R(x + w / 2 - 2, y + 26, 4, 14, '#333'); R(x, y, w, 28, '#1b1b1b'); R(x + 2, y + 2, w - 4, 24, '#2b0f0f'); txt('남은 빚', x + w / 2, y + 8, 6, '#ff9a9a'); txt('₩' + (999999999 - (time * 37) % 999999999).toLocaleString(), x + w / 2, y + 19, 6, '#ff3b3b'); },
-  jeep(x, y, w, h) { R(x + 6, y + 22, w - 12, 22, '#6b7b3a'); R(x + 30, y + 8, 36, 16, '#6b7b3a'); R(x + 34, y + 11, 28, 9, '#a9d6e5'); R(x + 2, y + 30, 6, 6, '#ffe08a'); R(x + w - 8, y + 30, 6, 6, '#c0392b'); R(x + 12, y + 40, 16, 16, '#1d1d1d'); R(x + w - 28, y + 40, 16, 16, '#1d1d1d'); R(x + 16, y + 44, 8, 8, '#777'); R(x + w - 24, y + 44, 8, 8, '#777'); R(x + 70, y + 10, 12, 10, '#e0a060'); R(x + 72, y + 6, 4, 5, '#e0a060'); R(x + 78, y + 6, 4, 5, '#e0a060'); R(x + 76, y + 13, 2, 2, '#222'); R(x + 50, y + 2, 26, 3, '#3a3a3a'); },
-  cone(x, y, w, h) { R(x + 4, y, 4, 4, '#ff7a1a'); R(x + 3, y + 4, 6, 3, '#fff'); R(x + 2, y + 7, 8, 5, '#ff7a1a'); R(x, y + 12, w, 4, '#333'); },
-  building_site(x, y, w, h) { R(x, y + 10, w, h - 10, '#d9d2c3'); for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) R(x + 8 + c * 22, y + 16 + r * 18, 14, 10, '#6ea8e8'); R(x + 36, y + h - 22, 24, 22, '#5a5550'); R(x - 2, y, w + 4, 12, '#f2c200'); for (let i = 0; i < 6; i++) R(x + i * 17, y, 8, 12, '#222'); txt('공사 중', x + w / 2, y + 6, 6, '#fff'); },
-  crane(x, y, w, h) { for (let i = 0; i < h - 16; i += 8) { R(x + 4, y + 16 + i, 8, 1, '#e0a800'); R(x + 4, y + 16 + i, 1, 8, '#e0a800'); R(x + 11, y + 16 + i, 1, 8, '#e0a800'); } R(x, y + 10, w, 6, '#e0a800'); R(x + w - 6, y + 16, 1, 30 + Math.sin(time * .02) * 6, '#333'); R(x + w - 10, y + 46 + Math.sin(time * .02) * 6, 10, 6, '#8a8378'); },
-  sea_house(x, y, w, h) { R(x + 8, y + 30, w - 16, 50, '#e8d7b0'); R(x, y + 18, w, 14, '#4a6fa5'); R(x + 12, y + 6, w - 24, 14, '#4a6fa5'); R(x + 20, y + 42, 22, 16, time % 200 < 190 ? '#ffd97a' : '#e0b85a'); R(x + 56, y + 46, 22, 34, '#7a5232'); txt('☾', x + w / 2, y + 12, 8, '#fff6c8'); },
-  raft(x, y, w, h) { for (let i = 0; i < 7; i++) R(x + i * 8, y, 7, h, i % 2 ? '#b47a44' : '#c98d52'); R(x, y + 4, w, 2, '#7a4a2a'); },
-  sofa(x, y, w, h) { R(x, y + 6, w, 14, '#ff8fa3'); R(x, y, 6, 20, '#e86f86'); R(x + w - 6, y, 6, 20, '#e86f86'); R(x + 3, y + 20, 3, 4, '#5a3d24'); R(x + w - 6, y + 20, 3, 4, '#5a3d24'); },
-  mailbox(x, y, w, h) { R(x + 13, y + 22, 6, 26, '#5a3d24'); R(x, y, w, 24, '#e0453a'); R(x + 4, y + 8, w - 8, 3, '#7a1f19'); txt('✉', x + w / 2, y + 17, 8, '#fff'); },
-  flag(x, y, w, h) { R(x + 2, y, 3, h, '#ddd'); R(x + 5, y + 2 + Math.sin(time * .1), 24, 14, '#ff5d73'); },
-  portal(x, y, w, h) { ctx.save(); ctx.globalAlpha = .6 + Math.sin(time * .08) * .3; R(x + 6, y + 4, w - 12, h - 4, '#7c5cff'); ctx.restore(); R(x + 2, y, 4, h, '#fff8ec'); R(x + w - 6, y, 4, h, '#fff8ec'); R(x + 2, y, w - 4, 4, '#fff8ec'); txt('↺', x + w / 2, y + h / 2, 12, '#fff'); }
-};
-
-function drawPlayer() {
-  const im = IMG.player, a = ART.player;
-  let f = !P.on ? (P.vy < 0 ? 6 : 7) : Math.abs(P.vx) > .4 ? 2 + (Math.floor(P.t) % 4) : Math.floor(time / 30) % 2;
-  const x = Math.round(P.x + P.w / 2), yb = Math.round(P.y + P.h);
-  ctx.save(); ctx.translate(x, yb); if (P.face < 0) ctx.scale(-1, 1);
-  if (im) ctx.drawImage(im, f * a.fw, 0, a.fw, a.fh, -a.fw / 2, -a.fh, a.fw, a.fh);
-  else { // 임시 캐릭터
-    const bob = f === 1 ? 1 : 0, leg = f >= 2 && f <= 5 ? (f % 2 ? 2 : -2) : 0;
-    R(-5, -8, 4, 8 + Math.min(0, leg), '#31406b'); R(1, -8, 4, 8 - Math.max(0, leg), '#31406b');
-    R(-6, -18 + bob, 12, 11, '#ff5d73'); R(-5, -27 + bob, 11, 10, '#f2c7a0'); R(-6, -29 + bob, 12, 5, '#2b2140'); R(-6, -26 + bob, 3, 5, '#2b2140'); R(2, -23 + bob, 2, 2, '#1a1a1a');
-  }
-  ctx.restore();
-}
-
-function drawCoin(c) {
-  const im = IMG.coin, a = ART.coin, y = c.y + Math.sin(time * .08 + c.x) * 2;
-  if (im) ctx.drawImage(im, (Math.floor(time / 8) % a.frames) * a.fw, 0, a.fw, a.fh, c.x - 6, y - 6, 12, 12);
-  else { const w = Math.abs(Math.cos(time * .06 + c.x)) * 5 + 1; R(c.x - w, y - 6, w * 2, 12, '#ffd84a'); R(c.x - w / 2, y - 4, w, 8, '#fff2a8'); }
-}
-
-// ---- 배경 (화면 좌표) ----
-function sky(id, sx0, sx1) {
-  const im = IMG['bg_' + id], top = -OY;
-  if (im) { // 가로 반복 + 패럴랙스
-    const sc = (270 + OY) / im.height, w = Math.round(im.width * sc), off = -Math.round((camX * .3) % w);
-    for (let x = off; x < VW; x += w) ctx.drawImage(im, x, top, w + 1, 270 + OY); // +1px로 이음새 제거
-    return;
-  }
-  const p = PAL[id], g = ctx.createLinearGradient(0, top, 0, 270);
-  g.addColorStop(0, p.sky[0]); g.addColorStop(1, p.sky[1]); ctx.fillStyle = g; ctx.fillRect(sx0, top, sx1 - sx0, 270 + OY);
-  const r = rng(id.length * 999);
-  const loop = (i, gap, f) => ((i * gap - camX * f) % (VW + gap) + VW + gap) % (VW + gap) - gap;
-  if (id === 'lobby' || id === 'end') {
-    for (let i = 0; i < 40; i++) { const bw = 20 + r() * 30, bh = 30 + r() * 70, bx = i * 46 - (camX * .3) % 46 - 46; R(bx, 220 - bh, bw, bh, id === 'lobby' ? '#3b2d6b' : '#5a4380'); }
-  } else if (id === 'mine') { // 동굴 천장과 바위 벽
-    for (let i = 0; i < 40; i++) { const bx = i * 24 - (camX * .3) % 24 - 24, d = 20 + r() * 40; R(bx, -OY, 24, OY + d, '#1e140f'); R(bx + 6, d, 10, 6 + r() * 8, '#1e140f'); }
-    for (let i = 0; i < 30; i++) { const bx = i * 36 - (camX * .5) % 36 - 36; R(bx, 150 + r() * 30, 30, 80, '#261a13'); }
-    for (let i = 0; i < 12; i++) R(loop(i, 80, .5), 120 + (i % 3) * 20, 2, 2, '#e8c86b');
-  } else if (id === 'shiba') { // 맑은 낮, 도시, 멀리 괴수
-    R(VW * .8 - camX * .02, 30, 24, 24, '#fff6b0');
-    for (let i = 0; i < 6; i++) { const cx = loop(i, 160, .12); R(cx, 40 + (i % 3) * 20, 50, 10, '#fff'); R(cx + 10, 34 + (i % 3) * 20, 28, 8, '#fff'); }
-    const kx = loop(0, 600, .08) + 200, kb = Math.sin(time * .03) * 2;
-    R(kx, 100 + kb, 40, 120, '#9db7c9'); R(kx + 8, 80 + kb, 26, 26, '#9db7c9'); R(kx + 28, 88 + kb, 4, 3, '#ff5a5a'); R(kx - 14, 130 + kb, 16, 8, '#9db7c9'); for (let s = 0; s < 4; s++) R(kx - 4, 110 + s * 18 + kb, 6, 8, '#8aa6ba');
-    for (let i = 0; i < 40; i++) { const bw = 24 + r() * 26, bh = 40 + r() * 80, bx = i * 44 - (camX * .3) % 44 - 44; R(bx, 220 - bh, bw, bh, '#7fa3bf'); for (let wy = 220 - bh + 6; wy < 210; wy += 10) R(bx + 5, wy, bw - 10, 3, '#a9c7dd'); }
-  } else if (id === 'building') { // 노을 + 계속 자라는 초고층 빌딩
-    for (let i = 0; i < 40; i++) { const bw = 22 + r() * 26, bh = 30 + r() * 60, bx = i * 44 - (camX * .3) % 44 - 44; R(bx, 220 - bh, bw, bh, '#c46a5a'); }
-    const tx = (1450 - camX) * .4 + VW * .4, floors = 8 + Math.floor(time / 90) % 30;
-    for (let f = 0; f < floors; f++) { const fy = 220 - 10 - f * 8; R(tx, fy, 70, 8, f % 2 ? '#6e7f99' : '#7d8eaa'); for (let c = 0; c < 6; c++) R(tx + 4 + c * 11, fy + 2, 7, 4, (f + c) % 5 ? '#ffd38a' : '#3d4a60'); }
-    R(tx + 30, 220 - 10 - floors * 8 - 10, 10, 10, '#ff5d73');
-  } else if (id === 'sea') { // 밤바다, 달, 별
-    for (let i = 0; i < 60; i++) R((r() * 3000 - camX * .05) % VW, -OY + r() * (130 + OY), 1, 1, r() < .2 ? '#fff' : '#9aa3d6');
-    const mx = VW * .3 - camX * .03; R(mx, 40, 20, 20, '#f6f0c8'); R(mx + 6, 40, 14, 14, PAL.sea.sky[0]);
-    R(sx0, 160, sx1 - sx0, 70, '#132a5c'); R(sx0, 160, sx1 - sx0, 2, '#4f6db0');
-    for (let i = 0; i < 8; i++) R(mx + 4 + Math.sin(time * .05 + i) * 4, 166 + i * 7, 12 - i, 1, '#f6f0c8');
-  }
-}
-
-function ground(id) { // 월드 좌표
-  const p = PAL[id], im = IMG['tile_' + id];
-  for (const s of solids) {
-    if (s.obj) continue; // 그림은 props()에서 그림
-    if (s.plat) { const bob = 0; prop(s.plat, s.x - 2, s.y + ART[s.plat].h - 2 + bob, PH[s.plat]); continue; }
-    if (im) {
-      for (let x = s.x; x < s.x + s.w; x += 16) { ctx.drawImage(im, 0, 0, 16, 16, x, s.y, 16, 16); for (let y = s.y + 16; y < 300; y += 16) ctx.drawImage(im, 16, 0, 16, 16, x, y, 16, 16); }
-    } else {
-      R(s.x, s.y, s.w, 300 - s.y, p.fill); R(s.x, s.y, s.w, 4, p.top);
-      if (id === 'shiba' && s.y === 220) for (let x = s.x; x < s.x + s.w; x += 32) R(x, s.y + 14, 16, 2, '#f2d200');
-      if (id === 'building') for (let x = s.x; x < s.x + s.w; x += 16) R(x, s.y + 4, 1, 300, '#7a7468');
-    }
-  }
-}
-
-function props(id) { // 월드 좌표, 바닥 기준
-  const sign = (x, label) => { prop('sign', x, 220, PH.sign); txt(label, x + 24, 190, 6, '#5a3d24'); };
-  const img = (k, x, yb) => { const a = ART[k], im = IMG[k]; if (im) ctx.drawImage(im, Math.round(x), Math.round(yb - a.h), a.w, a.h); };
-  if (id === 'lobby') {
-    sign(20, '→ 출발');
-    img('guris_logo', 100, 118 + Math.sin(time * .04) * 2);
-    prop('about_board', 150, 220, PH.about_board);
-    prop('arcade', 250, 220, PH.arcade);
-  }
-  if (id === 'mine') { // 지하노역소 원본 스프라이트
-    sign(330, '출시작 01');
-    for (const lx of [420, 560, 700]) { R(lx + 2, 0 - OY, 1, 60 + OY, '#2a1d14'); img('ug_light', lx, 78); }
-    prop('debt_board', 400, 220, PH.debt_board);
-    if (IMG.debt_board) { txt('남은 빚', 436, 188, 6, '#ff9a9a'); txt('₩' + (999999999 - (time * 37) % 999999999).toLocaleString(), 436, 199, 6, '#ff3b3b'); }
-    img('ug_cart', 520, 220);
-    const hx = 560 + Math.sin(time * .012) * 26, hf = Math.floor(time / 8) % ART.ug_hero.frames, dir = Math.cos(time * .012) >= 0 ? 1 : -1;
-    if (IMG.ug_hero) { ctx.save(); ctx.translate(Math.round(hx), 220); ctx.scale(dir, 1); ctx.drawImage(IMG.ug_hero, hf * 23, 0, 23, 25, -11, -25, 23, 25); ctx.restore(); }
-    img('ug_npc', 606, 220);
-    img('ug_gate', 630, 220);
-  }
-  if (id === 'shiba') { // 시바트럭 원본 스프라이트
-    sign(750, '출시작 02');
-    img('hd_logo', 820, 140 + Math.sin(time * .05) * 2);
-    img('hd_bulldog', 880, 220);
-    img('hd_car', 960, 220 + (time % 20 < 10 ? 0 : -1));
-    img('hd_dog', 1080, 220);
-  }
-  if (id === 'building') {
-    sign(1170, '개발 중 01');
-    prop('crane', 1180, 220, PH.crane);
-    prop('building_site', 1500, 172, PH.building_site);
-  }
-  if (id === 'sea') { // 잘자, 바다야 최신 스프라이트 (세일러 기본 의상)
-    sign(1690, '개발 중 02');
-    const wx = 1700 + ((time * .25) % 560); img('ww_whale', wx, 186 + Math.sin(time * .03) * 2);
-    img('ww_boat', 1840, 222);
-    img('ww_girl', 1900, 200 + Math.round(Math.sin(time * .04)));
-    const gx = 2030 + Math.sin(time * .01) * 40, gd = Math.cos(time * .01) >= 0 ? 1 : -1, gf = Math.floor(time / 10) % ART.ww_girl_walk.frames;
-    if (IMG.ww_girl_walk) { ctx.save(); ctx.translate(Math.round(gx), 220); ctx.scale(gd, 1); ctx.drawImage(IMG.ww_girl_walk, gf * 16, 0, 16, 35, -8, -35, 16, 35); ctx.restore(); }
-  }
-  if (id === 'end') {
-    sign(2130, '더 만드는 중!');
-    prop('mailbox', 2220, 220, PH.mailbox);
-    prop('flag', 2300, 220, PH.flag);
-    prop('portal', 2360, 220, PH.portal);
-  }
-}
-
-function overlay(id, sx0, sx1) { // 화면 좌표
-  const dark = { mine: 'rgba(8,4,2,.6)', sea: 'rgba(4,8,30,.35)' }[id];
-  if (dark) {
-    const px = P.x + 7 - camX, py = P.y + 10, g = ctx.createRadialGradient(px, py, 24, px, py, 170);
-    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, dark); ctx.fillStyle = g; ctx.fillRect(sx0, -OY, sx1 - sx0, 300 + OY);
-  }
-}
-function bubble(s) {
-  const x = s.x + s.w / 2, y = s.y - 14 + Math.sin(time * .1) * 1.5;
-  const coarse = matchMedia('(pointer:coarse)').matches, t = (coarse ? 'E 버튼 · ' : 'E · ') + s.label;
-  ctx.font = '8px Galmuri11, sans-serif'; const w = ctx.measureText(t).width + 12;
-  R(x - w / 2, y - 7, w, 14, '#fff8ec'); R(x - w / 2, y + 7, w, 1, '#14121f'); R(x - 2, y + 7, 4, 3, '#fff8ec');
-  txt(t, x, y + 1, 8, '#14121f');
-}
-
-function render() {
-  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#000'; ctx.fillRect(0, 0, cv.width, cv.height);
-  ctx.setTransform(S, 0, 0, S, 0, OY * S); ctx.imageSmoothingEnabled = false;
-  const cx = Math.round(camX * S) / S;
-  for (const z of ZONES) {
-    const sx0 = Math.max(0, z.x0 - cx), sx1 = Math.min(VW, z.x1 - cx);
-    if (sx1 <= sx0) continue;
-    ctx.save(); ctx.beginPath(); ctx.rect(sx0, -OY, sx1 - sx0, 300 + OY); ctx.clip();
-    sky(z.id, sx0, sx1);
-    if (z.id === 'mine') R(sx0, 226, sx1 - sx0, 80, '#070403');
-    if (z.id === 'sea') { R(sx0, 228, sx1 - sx0, 80, '#2b8fc9'); for (let x = sx0 - (time % 16); x < sx1; x += 16) R(x, 228 + Math.sin((x + cx + time) * .1), 8, 2, '#8fdcff'); }
-    ctx.translate(-cx, 0);
-    props(z.id); ground(z.id);
-    ctx.restore();
-  }
-  ctx.save(); ctx.translate(-cx, 0);
-  for (const c of coins) if (!c.got) drawCoin(c);
-  drawPlayer();
-  for (const p of parts) { ctx.globalAlpha = Math.min(1, p.life / 20); R(p.x, p.y, 2, 2, p.c); } ctx.globalAlpha = 1;
-  ctx.restore();
-  for (const z of ZONES) {
-    const sx0 = Math.max(0, z.x0 - cx), sx1 = Math.min(VW, z.x1 - cx); if (sx1 <= sx0) continue;
-    ctx.save(); ctx.beginPath(); ctx.rect(sx0, -OY, sx1 - sx0, 300 + OY); ctx.clip(); overlay(z.id, sx0, sx1); ctx.restore();
-  }
-  if (near && !paused && started) { ctx.save(); ctx.translate(-cx, 0); bubble(near); ctx.restore(); }
-}
-
-function loop() { update(); render(); requestAnimationFrame(loop); }
-
-/* =====================================================================
-   5) UI
-   ===================================================================== */
-const $ = id => document.getElementById(id);
-const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-function hud() { $('hudL').textContent = `★ ${coins.filter(c => c.got).length}/${coins.length}`; }
-let toastT; function toast(a, b) { const t = $('toast'); t.querySelector('b').textContent = a; t.querySelector('span').textContent = b; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2200); }
-
-function media(g, c1 = '#333', c2 = '#444') {
-  if (g.video) return `<div class="media"><video src="${esc(g.video)}" poster="${esc(g.poster || '')}" muted autoplay loop playsinline controls></video></div>`;
-  if (g.youtube) return `<div class="media"><iframe src="https://www.youtube.com/embed/${esc(g.youtube)}" allowfullscreen title="트레일러"></iframe></div>`;
-  if (g.image) return `<div class="media"><img src="${esc(g.image)}" alt="${esc(g.title || '')}"></div>`;
-  return `<div class="media"><div class="ph" style="--c1:${c1};--c2:${c2}"><span>스크린샷 · 트레일러 자리</span></div></div>`;
-}
-const links = ls => `<div class="links">${ls.map(l => l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>` : `<span>${esc(l.label)} · 준비 중</span>`).join('')}</div>`;
-function gameHTML(g) {
-  const gal = g.gallery ? `<div class="gallery">${g.gallery.map(src => `<img src="${esc(src)}" alt="" loading="lazy">`).join('')}</div>` : '';
-  return `<div style="--g:${g.color}">${media(g, g.color, '#222')}${gal}<span class="tag">${esc(g.genre)}</span><h2>${esc(g.title)}</h2><p class="sub">${esc(g.tagline)}</p>
-  <ul class="meta"><li><b>상태</b>${esc(g.status)}</li>${g.platform ? `<li><b>플랫폼</b>${esc(g.platform)}</li>` : ''}</ul>
-  <p class="desc">${esc(g.description)}</p><ul class="feat">${g.features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>${links(g.links)}</div>`;
-}
-function aboutHTML() {
-  const a = CONFIG.about;
-  return `${a.photo ? `<div class="media" style="aspect-ratio:1;max-width:160px"><img src="${esc(a.photo)}" alt=""></div>` : ''}<span class="tag">ABOUT ME</span><h2>${esc(a.name)}</h2><p class="sub">${esc(a.role)}</p>
-  <p class="desc">${esc(a.bio)}</p>${links(CONFIG.contact)}`;
-}
-const contactHTML = () => `<span class="tag">CONTACT</span><h2>연락하기</h2><p class="sub">협업 · 문의 · 피드백 모두 환영해요</p>${links(CONFIG.contact)}`;
-
-function openModal(html) { $('modalBody').innerHTML = html; $('modal').hidden = false; paused = true; $('modal').querySelector('.x').focus(); beep(660, .08, 'triangle'); }
-function closeAll() { $('modal').hidden = true; $('list').hidden = true; paused = false; for (const k in keys) keys[k] = false; }
-function interact() {
-  if (!near || paused) return;
-  if (near.kind === 'game') openModal(gameHTML(CONFIG.games[near.id]));
-  else if (near.kind === 'about') openModal(aboutHTML());
-  else if (near.kind === 'contact') openModal(contactHTML());
-  else if (near.kind === 'restart') { puff(P.x + 7, P.y + 10, 20, '#b9a6ff', 2.5); beep(440, .15, 'triangle'); P.x = P.safeX = 70; P.y = GROUND - 60; P.vy = 0; camX = 0; }
-}
-function openList() {
-  const gs = Object.entries(CONFIG.games);
-  $('listBody').innerHTML = `<span class="tag">PORTFOLIO</span><h2>${esc(CONFIG.studio)}</h2><p class="sub">${esc(CONFIG.about.role)} · 게임 ${gs.length}개</p>
-  <div class="grid">${gs.map(([id, g]) => `<button class="gc" data-g="${id}">${media(g, g.color, '#222')}<div class="t"><small>${esc(g.genre)}</small><h3>${esc(g.title)}</h3><small>${esc(g.status)}</small></div></button>`).join('')}
-  <button class="gc" data-a="1"><div class="t"><small>ABOUT</small><h3>${esc(CONFIG.about.name)}</h3><small>소개 · 연락처</small></div></button></div>`;
-  $('list').hidden = false; paused = true;
-}
-$('listBody').addEventListener('click', e => {
-  const b = e.target.closest('.gc'); if (!b) return;
-  $('list').hidden = true; openModal(b.dataset.g ? gameHTML(CONFIG.games[b.dataset.g]) : aboutHTML());
-});
-document.querySelectorAll('.backdrop').forEach(b => b.addEventListener('click', e => { if (e.target === b || e.target.classList.contains('x')) closeAll(); }));
-$('btnList').onclick = () => { start(); openList(); };
-$('btnSound').onclick = () => { soundOn = !soundOn; $('btnSound').textContent = soundOn ? '♪ ON' : '♪ OFF'; };
-
-function start() { if (started) return; started = true; $('intro').style.display = 'none'; toast(ZONES[0].name, CONFIG.studio); beep(660, .1); }
-$('intro').addEventListener('pointerdown', start);
-
-addEventListener('keydown', e => {
-  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code)) e.preventDefault();
-  if (!started) { start(); return; }
-  if (e.code === 'Escape') { closeAll(); return; }
-  if (!$('modal').hidden || !$('list').hidden) return;
-  keys[e.code] = true;
-  if (e.repeat) return;
-  if (e.code === 'KeyL') openList();
-  else if (e.code === 'KeyE' || e.code === 'Enter') interact();
-  else if (e.code === 'ArrowUp' && near) interact();
-  else if (['Space', 'KeyZ', 'KeyW', 'ArrowUp'].includes(e.code)) P.buf = 8;
-});
-addEventListener('keyup', e => keys[e.code] = false);
-addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
-
-document.querySelectorAll('#touch button').forEach(b => {
-  const k = b.dataset.k;
-  b.addEventListener('pointerdown', e => { e.preventDefault(); start(); b.classList.add('on');
-    if (k === 'jump') { touch.jump = true; P.buf = 8; } else if (k === 'act') interact(); else touch[k] = true; });
-  const up = () => { b.classList.remove('on'); if (k === 'jump') touch.jump = false; else if (k !== 'act') touch[k] = false; };
-  b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up); b.addEventListener('pointerleave', up);
-});
-
-$('introTitle').textContent = CONFIG.studio; $('introSub').textContent = CONFIG.tagline; document.title = `${CONFIG.studio} — 플레이하는 포트폴리오`;
-hud(); loop();
+/* 영상은 화면에 들어왔을 때만 재생 */
+(function () {
+  const v = document.querySelector('.phone video'); if (!v || still) { if (v) v.controls = true; return; }
+  new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: .25 }).observe(v);
+})();
 </script>
 </body>
 </html>
